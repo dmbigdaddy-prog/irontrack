@@ -35,7 +35,6 @@
         }
 
         html {
-            /* FIX: prevent pull-to-refresh on iOS — must be on html/body, not a bare ruleset */
             overscroll-behavior-y: none;
         }
 
@@ -46,7 +45,6 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            /* FIX: safe area insets must be on body, not a stray ruleset */
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
             overscroll-behavior-y: none;
@@ -113,7 +111,6 @@
             50% { box-shadow: 0 0 20px 5px rgba(245, 158, 11, 0.2); }
         }
 
-        /* iOS-style momentum scrolling */
         .scroll-touch {
             -webkit-overflow-scrolling: touch;
         }
@@ -124,7 +121,6 @@
             margin: 0;
         }
 
-        /* FIX: iOS input styling — preserve border-radius for custom inputs */
         input, select {
             -webkit-appearance: none;
         }
@@ -137,7 +133,6 @@
             outline: none;
         }
 
-        /* FIX: inputs need explicit border-radius since -webkit-appearance:none resets it */
         input[type="text"],
         input[type="number"] {
             border-radius: 0.5rem;
@@ -220,7 +215,6 @@
             background: rgba(34, 211, 238, 0.05);
         }
 
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -254,7 +248,6 @@
             -webkit-backdrop-filter: blur(8px);
         }
 
-        /* Safe area handling for iPhone notch / Dynamic Island */
         .safe-top {
             padding-top: max(1rem, env(safe-area-inset-top));
         }
@@ -263,13 +256,11 @@
             padding-bottom: max(1rem, env(safe-area-inset-bottom));
         }
 
-        /* Prevent text selection on UI elements */
         .no-select {
             -webkit-user-select: none;
             user-select: none;
         }
 
-        /* iOS-style switches */
         .ios-switch {
             position: relative;
             width: 51px;
@@ -277,24 +268,22 @@
             background: #334155;
             border-radius: 15.5px;
             transition: background 0.3s;
-            cursor: pointer;
-            flex-shrink: 0;
         }
 
         .ios-switch.active {
-            background: #0891b2;
+            background: #059669;
         }
 
         .ios-switch::after {
             content: '';
             position: absolute;
-            top: 2px;
-            left: 2px;
             width: 27px;
             height: 27px;
-            background: white;
             border-radius: 50%;
-            transition: transform 0.3s;
+            background: white;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
@@ -302,203 +291,116 @@
             transform: translateX(20px);
         }
 
-        /* FIX: scrollbar-hide utility (Tailwind CDN doesn't include it by default) */
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-
-        /* FIX: has-[:checked] selector fallback for older WebKit — use explicit active class instead */
         .rest-option {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.75rem;
-            border-radius: 0.5rem;
-            background: rgba(15, 23, 42, 0.5);
+            background: #1e293b;
             border: 1px solid #334155;
-            cursor: pointer;
             transition: all 0.2s;
         }
 
         .rest-option.selected {
-            border-color: #06b6d4;
-            background: rgba(6, 182, 212, 0.1);
+            background: #0891b2;
+            border-color: #22d3ee;
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.3);
         }
 
         .rest-option.selected span {
-            color: #22d3ee;
-        }
-
-        /* FIX: ensure the complete button is always visible above safe-area on iPhone */
-        .complete-btn-wrapper {
-            position: sticky;
-            bottom: max(1.5rem, calc(env(safe-area-inset-bottom) + 0.5rem));
-            z-index: 40;
-            margin-top: 1.5rem;
-        }
-
-        /* FIX: prevent iOS zoom on input focus (font-size must be >= 16px) */
-        input, select, textarea {
-            font-size: 16px !important;
-        }
-
-        /* FIX: toast transition — use translate-y with CSS vars for reliability */
-        #toast {
-            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s ease;
+            color: white;
         }
 
         #toast.hidden-toast {
-            transform: translateX(-50%) translateY(-150%);
+            transform: translate(-50%, -100px);
             opacity: 0;
             pointer-events: none;
         }
 
         #toast.visible-toast {
-            transform: translateX(-50%) translateY(0);
+            transform: translate(-50%, 0);
             opacity: 1;
         }
 
-        /* FIX: settings modal flex display conflict with hidden class */
-        #settings-modal.hidden {
-            display: none !important;
+        #toast {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* FIX: rest timer overlay flex display conflict with hidden class */
-        #rest-timer-overlay.hidden {
-            display: none !important;
+        input {
+            font-size: 16px !important;
         }
 
-        /* Workout complete button */
-        #complete-workout-btn.hidden {
-            display: none !important;
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                transition-duration: 0.01ms !important;
-            }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .complete-btn-wrapper {
+            padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+        }
+
+        /* NEW: Collapsible Styles */
+        .collapsible-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .collapsible-content.expanded {
+            max-height: 1000px;
+            opacity: 1;
+        }
+
+        .chevron-rotate {
+            transition: transform 0.3s ease;
+        }
+
+        .expanded .chevron-rotate {
+            transform: rotate(180deg);
         }
     </style>
 </head>
-<body class="min-h-screen bg-slate-950 text-slate-100 antialiased selection:bg-cyan-500/30">
+<body class="no-select">
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 bg-slate-900/90 backdrop-blur-xl border-b border-slate-800 safe-top">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-14">
-                <div class="flex items-center gap-3 cursor-pointer active:scale-95 transition-transform" onclick="app.switchView('dashboard')">
-                    <div class="relative w-9 h-9">
-                        <div class="absolute inset-0 bg-cyan-500 rounded-lg blur opacity-50 pulse-ring"></div>
-                        <div class="relative w-9 h-9 bg-gradient-to-br from-cyan-400 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
-                            <i class="fas fa-dumbbell text-white text-sm"></i>
-                        </div>
-                    </div>
-                    <div class="hidden sm:block">
-                        <h1 class="text-lg font-black tracking-tight text-white">IRON<span class="text-cyan-400 glow-text">TRACK</span></h1>
-                    </div>
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-slate-800 safe-top">
+        <div class="px-4 h-16 flex items-center justify-between max-w-7xl mx-auto">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-cyan-600 rounded-lg flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                    <i class="fas fa-dumbbell text-white text-sm"></i>
                 </div>
-
-                <div class="flex items-center gap-1 sm:gap-3">
-                    <button onclick="app.switchView('dashboard')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-slate-800 text-slate-300 hover:text-white no-select" data-view="dashboard">
-                        <i class="fas fa-chart-line sm:mr-2"></i><span class="hidden sm:inline">Stats</span>
-                    </button>
-                    <button onclick="app.switchView('builder')" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition-all hover:bg-slate-800 text-slate-300 hover:text-white no-select" data-view="builder">
-                        <i class="fas fa-edit sm:mr-2"></i><span class="hidden sm:inline">Edit</span>
-                    </button>
-                    <button onclick="app.switchView('workout')" class="nav-btn px-4 py-2 rounded-lg text-sm font-bold bg-cyan-600 active:bg-cyan-700 text-white shadow-lg shadow-cyan-500/30 transition-all active:scale-95 no-select" data-view="workout">
-                        <i class="fas fa-play mr-1"></i>Train
-                    </button>
-                    <button onclick="app.toggleSettings()" class="p-2 rounded-lg hover:bg-slate-800 text-slate-400 hover:text-white transition-colors no-select">
-                        <i class="fas fa-cog"></i>
-                    </button>
-                </div>
+                <h1 class="text-xl font-black tracking-tighter text-white glow-text">IRONTRACK<span class="text-cyan-500">PRO</span></h1>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="app.switchView('settings')" class="text-slate-400 hover:text-white transition-colors p-2">
+                    <i class="fas fa-cog text-xl"></i>
+                </button>
             </div>
         </div>
     </nav>
 
-    <!-- Settings Modal -->
-    <!-- FIX: removed conflicting "flex" class — flex is applied via JS when shown -->
-    <div id="settings-modal" class="fixed inset-0 z-[60] hidden modal-backdrop items-center justify-center p-4" style="display:none;">
-        <div class="glass-panel rounded-2xl p-6 max-w-md w-full border border-slate-700 slide-in max-h-[90vh] overflow-y-auto scroll-touch">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold text-white">Settings</h3>
-                <button onclick="app.toggleSettings()" class="text-slate-400 hover:text-white p-2 -mr-2">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-20 left-1/2 z-50 w-[90%] max-w-sm hidden-toast">
+        <div class="glass-panel rounded-2xl p-4 border-l-4 border-cyan-500 flex items-center gap-3 shadow-2xl">
+            <div id="toast-icon" class="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400">
+                <i class="fas fa-check"></i>
             </div>
-
-            <div class="space-y-4">
-                <!-- Sound Toggle -->
-                <div class="flex justify-between items-center bg-slate-800/50 rounded-xl p-4 border border-slate-700">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-volume-up text-cyan-400"></i>
-                        <span class="font-medium">Timer Sound</span>
-                    </div>
-                    <div class="ios-switch active" id="sound-toggle" onclick="app.toggleSound()"></div>
-                </div>
-
-                <!-- Haptic Toggle -->
-                <div class="flex justify-between items-center bg-slate-800/50 rounded-xl p-4 border border-slate-700">
-                    <div class="flex items-center gap-3">
-                        <i class="fas fa-mobile-alt text-cyan-400"></i>
-                        <span class="font-medium">Haptic Feedback</span>
-                    </div>
-                    <div class="ios-switch active" id="haptic-toggle" onclick="app.toggleHaptic()"></div>
-                </div>
-
-                <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
-                    <h4 class="font-semibold text-cyan-400 mb-3 flex items-center gap-2">
-                        <i class="fas fa-download"></i> Export Data
-                    </h4>
-                    <p class="text-sm text-slate-400 mb-3">Backup all workouts and programs.</p>
-                    <button onclick="app.exportData()" class="w-full py-3 bg-slate-700 hover:bg-slate-600 rounded-xl text-sm font-semibold transition-colors">
-                        Download Backup File
-                    </button>
-                </div>
-
-                <div class="bg-slate-800/50 rounded-xl p-4 border border-slate-700">
-                    <h4 class="font-semibold text-emerald-400 mb-3 flex items-center gap-2">
-                        <i class="fas fa-upload"></i> Import Data
-                    </h4>
-                    <input type="file" id="import-file" accept=".json" class="hidden" onchange="app.importData(this)">
-                    <label for="import-file" class="block w-full py-3 bg-slate-700 hover:bg-slate-600 rounded-xl text-sm font-semibold transition-colors text-center cursor-pointer">
-                        Restore from Backup
-                    </label>
-                </div>
-
-                <div class="bg-red-900/20 rounded-xl p-4 border border-red-900/50">
-                    <h4 class="font-semibold text-red-400 mb-3 flex items-center gap-2">
-                        <i class="fas fa-exclamation-triangle"></i> Danger Zone
-                    </h4>
-                    <button onclick="app.clearAllData()" class="w-full py-3 bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-600/50 rounded-xl text-sm font-semibold transition-colors">
-                        Erase All Data
-                    </button>
-                </div>
-
-                <div class="pt-4 border-t border-slate-800 text-center">
-                    <p class="text-xs text-slate-600">IronTrack Pro v2.1</p>
-                    <p class="text-xs text-slate-700 mt-1">Optimized for iPhone 13</p>
-                </div>
-            </div>
+            <p id="toast-message" class="text-white font-semibold"></p>
         </div>
     </div>
 
     <!-- Rest Timer Overlay -->
-    <!-- FIX: removed conflicting "flex" class — flex is applied via JS when shown -->
-    <div id="rest-timer-overlay" class="fixed inset-0 z-[55] hidden bg-slate-950/95 backdrop-blur-md items-center justify-center" style="display:none;">
-        <div class="text-center w-full px-6">
-            <div class="mb-2">
-                <i class="fas fa-hourglass-half text-amber-400 text-2xl mb-4"></i>
+    <div id="rest-timer-overlay" class="fixed inset-0 z-[60] modal-backdrop flex items-center justify-center p-6 hidden">
+        <div class="w-full max-w-sm glass-panel rounded-[2.5rem] p-8 text-center border border-cyan-500/20 slide-in">
+            <p class="text-slate-400 uppercase tracking-[0.2em] text-xs font-bold mb-2">Rest Period</p>
+            <div class="relative inline-block mb-8">
+                <div class="pulse-ring absolute inset-0 rounded-full"></div>
+                <div class="w-48 h-48 rounded-full border-4 border-slate-800 flex items-center justify-center relative z-10 bg-slate-900/50">
+                    <span id="rest-timer-display" class="text-6xl font-black text-white mono tabular-nums">02:00</span>
+                </div>
             </div>
-            <div class="text-7xl sm:text-8xl font-bold mono text-amber-400 mb-2 rest-timer-active tracking-tighter" id="rest-timer-display">02:00</div>
-            <p class="text-slate-400 mb-8 text-sm uppercase tracking-widest">Rest Period</p>
-
+            
             <div class="flex gap-4 justify-center items-center max-w-xs mx-auto">
                 <button onclick="app.adjustRestTimer(-30)" class="w-14 h-14 rounded-2xl bg-slate-800 active:bg-slate-700 flex items-center justify-center text-slate-300 text-xl transition-colors no-select">
                     <i class="fas fa-minus"></i>
@@ -508,24 +410,6 @@
                 </button>
                 <button onclick="app.adjustRestTimer(30)" class="w-14 h-14 rounded-2xl bg-slate-800 active:bg-slate-700 flex items-center justify-center text-slate-300 text-xl transition-colors no-select">
                     <i class="fas fa-plus"></i>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Install Prompt (iOS) -->
-    <div id="ios-install-prompt" class="fixed bottom-24 left-4 right-4 z-40 hidden">
-        <div class="glass-panel rounded-2xl p-4 border border-cyan-500/30 shadow-2xl">
-            <div class="flex items-start gap-3">
-                <div class="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <i class="fas fa-share text-cyan-400"></i>
-                </div>
-                <div class="flex-1">
-                    <h4 class="font-bold text-white mb-1">Install IronTrack</h4>
-                    <p class="text-sm text-slate-400">Tap the share button below, then "Add to Home Screen" for the best experience.</p>
-                </div>
-                <button onclick="document.getElementById('ios-install-prompt').classList.add('hidden'); localStorage.setItem('ios-prompt-dismissed','true')" class="text-slate-500 hover:text-white p-1">
-                    <i class="fas fa-times"></i>
                 </button>
             </div>
         </div>
@@ -571,432 +455,1011 @@
                     <div class="absolute top-0 right-0 w-20 h-20 bg-amber-500/10 rounded-full blur-2xl"></div>
                     <p class="text-slate-400 text-xs uppercase tracking-wider font-semibold mb-1">Workouts</p>
                     <h3 class="text-2xl sm:text-3xl font-black text-white mono" id="stat-workouts-done">0</h3>
-                    <p class="text-slate-500 text-xs mt-1">Completed</p>
+                    <p class="text-slate-500 text-xs mt-1">Total sessions</p>
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide no-select">
-                <button onclick="app.switchView('workout')" class="flex-shrink-0 px-5 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-xl font-bold text-sm shadow-lg shadow-cyan-500/25 active:scale-95 transition-transform flex items-center gap-2">
-                    <i class="fas fa-play"></i> Start Workout
-                </button>
-                <button onclick="app.switchView('builder')" class="flex-shrink-0 px-5 py-3 bg-slate-800 border border-slate-700 rounded-xl font-semibold text-sm active:bg-slate-700 transition-colors flex items-center gap-2">
-                    <i class="fas fa-edit"></i> Edit Program
-                </button>
-                <button onclick="app.resetWeek()" class="flex-shrink-0 px-5 py-3 bg-slate-800 border border-slate-700 rounded-xl font-semibold text-sm active:bg-slate-700 transition-colors flex items-center gap-2 text-amber-400">
-                    <i class="fas fa-undo"></i> Reset
-                </button>
-            </div>
-
-            <!-- Main Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-                <!-- Weekly Schedule -->
-                <div class="lg:col-span-2 glass-panel rounded-2xl p-4 sm:p-6 border border-slate-800">
-                    <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-lg sm:text-xl font-bold flex items-center gap-2">
-                            <i class="fas fa-calendar-week text-cyan-400"></i>
-                            This Week
-                        </h2>
-                        <span class="text-xs bg-slate-800 px-3 py-1 rounded-full text-slate-400 border border-slate-700">
-                            Week <span id="schedule-week-num">1</span>
-                        </span>
-                    </div>
-
-                    <div class="space-y-2" id="schedule-list">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-
-                <!-- Recent History -->
-                <div class="glass-panel rounded-2xl p-4 sm:p-6 border border-slate-800 h-fit">
-                    <h2 class="text-lg sm:text-xl font-bold mb-4 flex items-center gap-2">
-                        <i class="fas fa-history text-cyan-400"></i>
-                        History
-                    </h2>
-                    <div class="space-y-2 max-h-80 overflow-y-auto scroll-touch" id="recent-workouts-list">
-                        <p class="text-slate-500 text-center py-8 text-sm">No workouts yet</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Progress Chart -->
-            <div class="glass-panel rounded-2xl p-4 sm:p-6 border border-slate-800">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-lg sm:text-xl font-bold flex items-center gap-2">
-                        <i class="fas fa-chart-line text-cyan-400"></i>
-                        Progress
-                    </h2>
-                    <div class="flex gap-1 bg-slate-800 rounded-lg p-1">
-                        <button onclick="app.toggleChartType('line')" class="p-2 rounded-md text-xs bg-slate-700 text-white transition-colors" id="chart-line-btn">
-                            <i class="fas fa-chart-line"></i>
-                        </button>
-                        <button onclick="app.toggleChartType('bar')" class="p-2 rounded-md text-xs text-slate-500 hover:text-white transition-colors" id="chart-bar-btn">
-                            <i class="fas fa-chart-bar"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="h-48 sm:h-64 w-full">
-                    <canvas id="progressChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <!-- Program Builder View -->
-        <div id="view-builder" class="view-section hidden fade-in">
-            <div class="max-w-4xl mx-auto">
-                <div class="glass-panel rounded-2xl p-5 sm:p-8 border border-slate-800">
-                    <div class="mb-6">
-                        <h2 class="text-2xl sm:text-3xl font-bold mb-2 text-white">Program Builder</h2>
-                        <p class="text-slate-400 text-sm">Design your progressive overload program</p>
-                    </div>
-
-                    <div class="space-y-5">
-                        <!-- Basic Settings -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-2">
-                                <label class="text-sm font-semibold text-slate-300">Program Name</label>
-                                <input type="text" id="program-name" placeholder="e.g., Powerbuilding Phase 1"
-                                    class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-sm font-semibold text-slate-300">Weekly Increase (%)</label>
-                                <div class="relative">
-                                    <input type="number" id="weekly-increase" value="2.5" step="0.5" min="0.5" max="20" inputmode="decimal"
-                                        class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all">
-                                    <span class="absolute right-4 top-3.5 text-slate-500 pointer-events-none">%</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="space-y-2">
-                                <label class="text-sm font-semibold text-slate-300">Duration</label>
-                                <!-- FIX: wrapped select in relative div for proper chevron positioning -->
-                                <div class="relative">
-                                    <select id="program-duration" class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all appearance-none">
-                                        <option value="4">4 Weeks</option>
-                                        <option value="5">5 Weeks</option>
-                                        <option value="6" selected>6 Weeks</option>
-                                        <option value="8">8 Weeks</option>
-                                        <option value="12">12 Weeks</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"></i>
-                                </div>
-                            </div>
-                            <div class="space-y-2">
-                                <label class="text-sm font-semibold text-slate-300">Training Days/Week</label>
-                                <div class="relative">
-                                    <select id="training-days" class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all appearance-none">
-                                        <option value="2">2 Days (Upper/Lower)</option>
-                                        <option value="3">3 Days (Full Body)</option>
-                                        <option value="4" selected>4 Days (Upper/Lower)</option>
-                                        <option value="5">5 Days (Bro Split)</option>
-                                        <option value="6">6 Days (PPL)</option>
-                                    </select>
-                                    <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Rest Timer -->
-                        <div class="bg-slate-800/30 rounded-xl p-4 border border-slate-700">
-                            <label class="text-sm font-semibold text-slate-300 mb-3 block">Default Rest Timer</label>
-                            <!-- FIX: replaced has-[:checked] CSS (unsupported on iOS Safari < 16) with JS-driven .selected class -->
-                            <div class="grid grid-cols-4 gap-2" id="rest-timer-options">
-                                <div class="rest-option" data-value="90" onclick="app.selectRestTimer(this)">
-                                    <span class="text-sm font-bold text-slate-300">90s</span>
-                                </div>
-                                <div class="rest-option selected" data-value="120" onclick="app.selectRestTimer(this)">
-                                    <span class="text-sm font-bold">2m</span>
-                                </div>
-                                <div class="rest-option" data-value="180" onclick="app.selectRestTimer(this)">
-                                    <span class="text-sm font-bold text-slate-300">3m</span>
-                                </div>
-                                <div class="rest-option" data-value="0" onclick="app.selectRestTimer(this)">
-                                    <span class="text-sm font-bold text-slate-300">Off</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Exercises -->
-                        <div class="border-t border-slate-800 pt-6">
-                            <div class="flex justify-between items-center mb-4">
-                                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                                    <i class="fas fa-list-ul text-cyan-400"></i>
-                                    Exercises
-                                </h3>
-                                <div class="flex gap-2">
-                                    <button onclick="app.loadExample()" class="px-3 py-2 bg-slate-800 border border-slate-700 rounded-lg text-xs font-medium active:bg-slate-700 transition-colors">
-                                        Load Example
-                                    </button>
-                                    <button onclick="app.addExercise()" class="px-3 py-2 bg-cyan-600 active:bg-cyan-700 text-white rounded-lg text-xs font-bold shadow-lg shadow-cyan-500/30 active:scale-95 transition-all flex items-center gap-1">
-                                        <i class="fas fa-plus"></i> Add
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div id="exercises-list" class="space-y-3">
-                                <!-- Exercise forms -->
-                            </div>
-                        </div>
-
-                        <!-- Actions -->
-                        <div class="flex gap-3 pt-6 border-t border-slate-800">
-                            <button onclick="app.saveProgram()" class="flex-1 btn-primary text-white font-bold py-4 rounded-xl shadow-lg shadow-cyan-500/25 active:scale-95 transition-transform">
-                                <i class="fas fa-save mr-2"></i>Save Program
-                            </button>
-                            <button onclick="app.clearBuilder()" class="px-4 py-4 bg-slate-800 border border-slate-700 rounded-xl font-semibold active:bg-slate-700 transition-colors">
-                                Clear
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active Workout View -->
-        <div id="view-workout" class="view-section hidden fade-in">
-            <div class="max-w-3xl mx-auto">
-                <!-- Day Selector -->
-                <div class="flex overflow-x-auto gap-2 mb-4 pb-2 scrollbar-hide no-select scroll-touch" id="day-selector">
-                    <!-- Day tabs -->
-                </div>
-
-                <!-- Workout Header -->
-                <div class="glass-panel rounded-2xl p-4 sm:p-6 border border-slate-800 mb-4 flex justify-between items-center gap-4">
+            <!-- Current Program Info -->
+            <div class="glass-panel rounded-3xl p-6 border border-slate-800">
+                <div class="flex justify-between items-start mb-6">
                     <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <h2 class="text-xl sm:text-2xl font-bold text-white" id="workout-day-title">Select Day</h2>
-                            <span class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-bold border border-cyan-500/30" id="workout-week-badge">Week 1</span>
-                        </div>
-                        <p class="text-slate-400 text-xs sm:text-sm" id="workout-date">Start your session</p>
+                        <h2 class="text-2xl font-black text-white mb-1" id="display-program-name">No Program Active</h2>
+                        <p class="text-slate-400 text-sm" id="display-program-meta">Select or create a program to begin</p>
                     </div>
-                    <div class="text-right bg-slate-900/50 px-3 py-2 rounded-xl border border-slate-700">
-                        <div class="text-xl sm:text-2xl font-mono font-bold text-cyan-400 tracking-wider" id="workout-timer">00:00</div>
-                        <p class="text-xs text-slate-500 uppercase">Duration</p>
-                    </div>
-                </div>
-
-                <!-- Exercise Cards -->
-                <div id="workout-exercises" class="space-y-4">
-                    <div class="text-center py-16 glass-panel rounded-2xl border border-slate-800 border-dashed">
-                        <div class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="fas fa-dumbbell text-3xl text-slate-600"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-slate-300 mb-2">No Program Active</h3>
-                        <p class="text-slate-500 mb-6 text-sm">Create a workout program to start tracking</p>
-                        <button onclick="app.switchView('builder')" class="px-6 py-3 bg-cyan-600 active:bg-cyan-700 text-white rounded-xl font-bold shadow-lg shadow-cyan-500/30 active:scale-95 transition-transform">
-                            Create Program
-                        </button>
-                    </div>
-                </div>
-
-                <!-- FIX: complete button wrapper uses safe-area-aware sticky positioning -->
-                <div class="complete-btn-wrapper">
-                    <button onclick="app.completeWorkout()" id="complete-workout-btn"
-                        class="w-full btn-success text-white font-bold py-4 rounded-xl shadow-lg shadow-emerald-500/30 hidden active:scale-95 transition-transform flex items-center justify-center gap-2">
-                        <i class="fas fa-check-circle text-xl"></i>
-                        <span>Finish Workout</span>
+                    <button onclick="app.switchView('program-manager')" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-xl text-sm font-bold transition-colors">
+                        Manage
                     </button>
+                </div>
+
+                <div id="dashboard-active-content" class="hidden">
+                    <div class="flex overflow-x-auto gap-2 mb-4 pb-2 scrollbar-hide no-select scroll-touch" id="day-selector">
+                        <!-- Days will be injected here -->
+                    </div>
+
+                    <div id="workout-preview" class="space-y-3">
+                        <!-- Workout preview will be injected here -->
+                    </div>
+
+                    <button onclick="app.startWorkout()" class="w-full mt-6 btn-primary text-white font-black py-4 rounded-2xl shadow-xl shadow-cyan-900/20 flex items-center justify-center gap-2">
+                        <i class="fas fa-play"></i> START WORKOUT
+                    </button>
+                </div>
+
+                <div id="dashboard-empty-content" class="py-12 text-center">
+                    <div class="w-20 h-20 bg-slate-800/50 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-clipboard-list text-3xl text-slate-600"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Ready to lift?</h3>
+                    <p class="text-slate-500 text-sm mb-6 max-w-xs mx-auto">Create your first training program to start tracking your progress.</p>
+                    <button onclick="app.switchView('program-manager')" class="btn-primary text-white px-8 py-3 rounded-xl font-bold">
+                        Get Started
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent History -->
+            <div>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-black text-white">Recent History</h3>
+                    <button onclick="app.switchView('history')" class="text-cyan-500 text-sm font-bold">View All</button>
+                </div>
+                <div id="recent-history-list" class="space-y-3">
+                    <!-- History items will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Program Manager View -->
+        <div id="view-program-manager" class="view-section space-y-6 fade-in hidden">
+            <div class="flex items-center justify-between">
+                <h2 class="text-2xl font-black text-white">Programs</h2>
+                <button onclick="app.openProgramEditor()" class="btn-primary text-white px-4 py-2 rounded-xl text-sm font-bold">
+                    <i class="fas fa-plus mr-1"></i> New
+                </button>
+            </div>
+
+            <div id="programs-list" class="space-y-4">
+                <!-- Programs will be injected here -->
+            </div>
+
+            <button onclick="app.switchView('dashboard')" class="w-full bg-slate-800 text-slate-300 font-bold py-3 rounded-xl">
+                Back to Dashboard
+            </button>
+        </div>
+
+        <!-- Program Editor View -->
+        <div id="view-builder" class="view-section space-y-6 fade-in hidden">
+            <div class="flex items-center gap-4">
+                <button onclick="app.switchView('program-manager')" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-2xl font-black text-white" id="builder-title">Create Program</h2>
+            </div>
+
+            <div class="glass-panel rounded-3xl p-6 border border-slate-800 space-y-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Program Name</label>
+                        <input type="text" id="program-name" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:outline-none transition-colors" placeholder="e.g., PPL Hypertrophy">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Weekly Increase (%)</label>
+                            <input type="number" id="weekly-increase" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:outline-none" value="2.5" step="0.5">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Duration (Weeks)</label>
+                            <input type="number" id="program-duration" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:outline-none" value="6">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Training Days Per Week</label>
+                        <div class="relative">
+                            <select id="training-days" onchange="app.updateBuilderDays()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-cyan-500 focus:outline-none appearance-none">
+                                <option value="1">1 Day</option>
+                                <option value="2">2 Days</option>
+                                <option value="3">3 Days</option>
+                                <option value="4" selected>4 Days</option>
+                                <option value="5">5 Days</option>
+                                <option value="6">6 Days</option>
+                                <option value="7">7 Days</option>
+                            </select>
+                            <i class="fas fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"></i>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Default Rest Timer</label>
+                        <div class="grid grid-cols-4 gap-2" id="rest-timer-options">
+                            <div class="rest-option rounded-xl p-2 text-center cursor-pointer" data-value="60" onclick="app.selectRestTimer(this)">
+                                <span class="block text-xs font-bold text-slate-400">60s</span>
+                            </div>
+                            <div class="rest-option rounded-xl p-2 text-center cursor-pointer" data-value="90" onclick="app.selectRestTimer(this)">
+                                <span class="block text-xs font-bold text-slate-400">90s</span>
+                            </div>
+                            <div class="rest-option selected rounded-xl p-2 text-center cursor-pointer" data-value="120" onclick="app.selectRestTimer(this)">
+                                <span class="block text-xs font-bold text-slate-400">120s</span>
+                            </div>
+                            <div class="rest-option rounded-xl p-2 text-center cursor-pointer" data-value="180" onclick="app.selectRestTimer(this)">
+                                <span class="block text-xs font-bold text-slate-400">180s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-black text-white">Workouts</h3>
+                        <button onclick="app.loadExample()" class="text-cyan-500 text-xs font-bold uppercase tracking-widest">Load Example</button>
+                    </div>
+                    
+                    <div id="builder-days-container" class="space-y-4">
+                        <!-- Days and exercises will be injected here -->
+                    </div>
+
+                    <button onclick="app.saveProgram()" class="w-full mt-8 btn-success text-white font-black py-4 rounded-2xl shadow-xl shadow-emerald-900/20">
+                        SAVE PROGRAM
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workout View -->
+        <div id="view-workout" class="view-section space-y-6 fade-in hidden">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="text-2xl font-black text-white" id="workout-day-title">Day 1</h2>
+                    <p class="text-slate-400 text-sm" id="workout-program-name">Program Name</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Duration</p>
+                    <p class="text-xl font-black text-white mono" id="workout-timer">00:00</p>
+                </div>
+            </div>
+
+            <div id="workout-exercises" class="space-y-4">
+                <!-- Exercises will be injected here -->
+            </div>
+
+            <div class="complete-btn-wrapper">
+                <button onclick="app.completeWorkout()" class="w-full btn-success text-white font-black py-4 rounded-2xl shadow-xl shadow-emerald-900/20 flex items-center justify-center gap-2">
+                    <i class="fas fa-check-circle"></i> FINISH WORKOUT
+                </button>
+            </div>
+        </div>
+
+        <!-- History View -->
+        <div id="view-history" class="view-section space-y-6 fade-in hidden">
+            <div class="flex items-center gap-4">
+                <button onclick="app.switchView('dashboard')" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-2xl font-black text-white">Training History</h2>
+            </div>
+
+            <div class="glass-panel rounded-3xl p-6 border border-slate-800">
+                <canvas id="volume-chart" class="w-full h-48 mb-8"></canvas>
+                
+                <div id="full-history-list" class="space-y-4">
+                    <!-- Full history will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings View -->
+        <div id="view-settings" class="view-section space-y-6 fade-in hidden">
+            <div class="flex items-center gap-4">
+                <button onclick="app.switchView('dashboard')" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 class="text-2xl font-black text-white">Settings</h2>
+            </div>
+
+            <div class="glass-panel rounded-3xl p-6 border border-slate-800 space-y-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-bold text-white">Sound Effects</p>
+                        <p class="text-xs text-slate-500">Timer and completion alerts</p>
+                    </div>
+                    <div id="sound-toggle" onclick="app.toggleSound()" class="ios-switch"></div>
+                </div>
+
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="font-bold text-white">Haptic Feedback</p>
+                        <p class="text-xs text-slate-500">Vibrations on interactions</p>
+                    </div>
+                    <div id="haptic-toggle" onclick="app.toggleHaptic()" class="ios-switch"></div>
+                </div>
+
+                <div class="pt-6 border-t border-slate-800">
+                    <h3 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Data Management</h3>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="app.exportData()" class="bg-slate-800 hover:bg-slate-700 text-white py-3 rounded-xl font-bold text-sm transition-colors">
+                            <i class="fas fa-download mr-2"></i> Export
+                        </button>
+                        <button onclick="document.getElementById('import-input').click()" class="bg-slate-800 hover:bg-slate-700 text-white py-3 rounded-xl font-bold text-sm transition-colors">
+                            <i class="fas fa-upload mr-2"></i> Import
+                        </button>
+                        <input type="file" id="import-input" class="hidden" accept=".json" onchange="app.importData(event)">
+                    </div>
+                    <button onclick="app.resetAllData()" class="w-full mt-3 bg-red-500/10 hover:bg-red-500/20 text-red-500 py-3 rounded-xl font-bold text-sm transition-colors border border-red-500/20">
+                        <i class="fas fa-trash-alt mr-2"></i> Reset All Data
+                    </button>
+                </div>
+
+                <div class="pt-6 border-t border-slate-800 text-center">
+                    <p class="text-slate-600 text-xs">IronTrack Pro v2.1.0</p>
+                    <p class="text-slate-700 text-[10px] mt-1 uppercase tracking-widest">Built for performance</p>
                 </div>
             </div>
         </div>
 
     </main>
 
-    <!-- Toast Notification -->
-    <!-- FIX: replaced Tailwind translate classes with CSS class toggle for reliable iOS animation -->
-    <div id="toast" class="fixed top-20 left-1/2 z-50 w-[90%] max-w-sm hidden-toast">
-        <div class="glass-panel px-4 py-3 rounded-xl shadow-2xl flex items-center gap-3 border-l-4 border-cyan-500">
-            <i id="toast-icon" class="fas fa-check-circle text-cyan-400 text-lg"></i>
-            <div class="flex-1 min-w-0">
-                <h4 id="toast-title" class="font-bold text-white text-sm">Success</h4>
-                <p id="toast-message" class="text-slate-400 text-xs truncate">Operation completed</p>
-            </div>
+    <!-- Bottom Navigation (Mobile) -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 glass-panel border-t border-slate-800 safe-bottom">
+        <div class="flex justify-around items-center h-16 max-w-md mx-auto">
+            <button onclick="app.switchView('dashboard')" class="nav-link flex flex-col items-center gap-1 text-cyan-500">
+                <i class="fas fa-home text-xl"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest">Home</span>
+            </button>
+            <button onclick="app.switchView('program-manager')" class="nav-link flex flex-col items-center gap-1 text-slate-500">
+                <i class="fas fa-list-check text-xl"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest">Programs</span>
+            </button>
+            <button onclick="app.switchView('history')" class="nav-link flex flex-col items-center gap-1 text-slate-500">
+                <i class="fas fa-chart-line text-xl"></i>
+                <span class="text-[10px] font-bold uppercase tracking-widest">History</span>
+            </button>
         </div>
-    </div>
+    </nav>
 
     <script>
-        // ─── Service Worker for Offline / PWA ────────────────────────────────────
-        // FIX: Blob-URL service workers are blocked in iOS Safari (cross-origin restriction).
-        // We inject the SW code via a same-origin data URL workaround using a dedicated path.
-        // Since this is a single-file app, we register only what iOS allows.
-        if ('serviceWorker' in navigator) {
-            // Only register if we're on a proper origin (not file://)
-            if (location.protocol !== 'file:') {
-                const swCode = `
-                    const CACHE_NAME = 'irontrack-v2.1';
-                    const urlsToCache = ['/'];
-
-                    self.addEventListener('install', event => {
-                        event.waitUntil(
-                            caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
-                        );
-                        self.skipWaiting();
-                    });
-
-                    self.addEventListener('fetch', event => {
-                        event.respondWith(
-                            caches.match(event.request).then(response => {
-                                return response || fetch(event.request).catch(() => {});
-                            })
-                        );
-                    });
-
-                    self.addEventListener('activate', event => {
-                        event.waitUntil(
-                            caches.keys().then(names =>
-                                Promise.all(names.filter(n => n !== CACHE_NAME).map(n => caches.delete(n)))
-                            )
-                        );
-                        self.clients.claim();
-                    });
-                `;
-                try {
-                    const swBlob = new Blob([swCode], { type: 'application/javascript' });
-                    const swUrl = URL.createObjectURL(swBlob);
-                    navigator.serviceWorker.register(swUrl)
-                        .then(reg => console.log('SW registered:', reg.scope))
-                        .catch(err => console.warn('SW registration failed (expected on some hosts):', err));
-                } catch(e) {
-                    console.warn('SW blob failed:', e);
-                }
-            }
-        }
-
-        // ─── iOS Install Prompt ───────────────────────────────────────────────────
-        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-        const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone;
-
-        if (isIOS && !isStandalone && !localStorage.getItem('ios-prompt-dismissed')) {
-            setTimeout(() => {
-                document.getElementById('ios-install-prompt').classList.remove('hidden');
-            }, 2000);
-        }
-
-        // ─── Haptic Feedback Helper ───────────────────────────────────────────────
-        const haptic = (type = 'light') => {
-            if (window.navigator && window.navigator.vibrate) {
-                const patterns = { light: 10, medium: 20, heavy: 30, success: [10, 50, 10], error: [30, 100, 30] };
-                navigator.vibrate(patterns[type] || 10);
-            }
+        // ─── Utilities ────────────────────────────────────────────────────────────
+        const haptic = (style = 'medium') => {
+            if (!window.navigator.vibrate) return;
+            if (style === 'light') window.navigator.vibrate(10);
+            else if (style === 'medium') window.navigator.vibrate(30);
+            else if (style === 'success') window.navigator.vibrate([30, 50, 30]);
+            else if (style === 'error') window.navigator.vibrate([50, 100, 50]);
         };
 
-        // ─── Main App Class ───────────────────────────────────────────────────────
+        const formatTime = (seconds) => {
+            const m = Math.floor(seconds / 60);
+            const s = seconds % 60;
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        };
+
+        // ─── Core App ─────────────────────────────────────────────────────────────
         class WorkoutApp {
             constructor() {
-                this.data = {
-                    program: null,
-                    currentWeek: 1,
-                    workouts: [],
-                    settings: { restTimer: 120, soundEnabled: true, hapticEnabled: true }
-                };
-                this.timer = null;
-                this.restTimerInterval = null;
-                this.restRemaining = 0;   // FIX: track remaining time in state, not just DOM
-                this.timerSeconds = 0;
-                this.currentDay = 0;
-                this.chart = null;
-                this.chartType = 'line';
-                this.selectedRestTimer = 120; // FIX: track selected rest timer value
+                this.data = this.loadFromStorage();
+                this.currentView = 'dashboard';
+                this.activeWorkout = null;
+                this.workoutTimer = null;
+                this.restTimer = null;
+                this.selectedRestTimer = 120;
+                this.editingProgramId = null;
                 this.init();
             }
 
-            init() {
-                this.loadFromStorage();
-                this.render();
-                this.initChart();
-                this.syncSettingsUI();
-
-                if (!this.data.program) {
-                    setTimeout(() => this.switchView('builder'), 100);
-                }
-
-                document.addEventListener('visibilitychange', () => {
-                    // Timer continues in background — no action needed
-                });
-            }
-
             loadFromStorage() {
-                try {
-                    const saved = localStorage.getItem('irontrack_data_v2');
-                    if (saved) {
-                        const parsed = JSON.parse(saved);
-                        // FIX: merge with defaults so missing keys don't break the app
-                        this.data = Object.assign({
-                            program: null, currentWeek: 1, workouts: [],
-                            settings: { restTimer: 120, soundEnabled: true, hapticEnabled: true }
-                        }, parsed);
-                        if (!this.data.settings) {
-                            this.data.settings = { restTimer: 120, soundEnabled: true, hapticEnabled: true };
-                        }
+                const saved = localStorage.getItem('irontrack_data_v2');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    // Migration for multiple programs
+                    if (data.program && !data.programs) {
+                        const p = data.program;
+                        p.id = Date.now();
+                        data.programs = [p];
+                        data.currentProgramId = p.id;
+                        delete data.program;
                     }
-                } catch (e) {
-                    console.error('Load failed:', e);
+                    return data;
                 }
+                return {
+                    programs: [],
+                    currentProgramId: null,
+                    workouts: [],
+                    currentWeek: 1,
+                    settings: {
+                        soundEnabled: true,
+                        hapticEnabled: true
+                    }
+                };
             }
 
             saveToStorage() {
-                try {
-                    localStorage.setItem('irontrack_data_v2', JSON.stringify(this.data));
-                } catch (e) {
-                    console.error('Save failed:', e);
+                localStorage.setItem('irontrack_data_v2', JSON.stringify(this.data));
+            }
+
+            init() {
+                this.syncSettingsUI();
+                this.render();
+                this.switchView('dashboard');
+                
+                // Handle iOS install prompt
+                if (window.navigator.standalone) {
+                    // Already installed
+                } else if (/iPhone|iPad|iPod/.test(navigator.userAgent) && !localStorage.getItem('ios-prompt-dismissed')) {
+                    // Show prompt after 3 seconds
+                    setTimeout(() => {
+                        const prompt = document.getElementById('ios-install-prompt');
+                        if (prompt) prompt.classList.remove('hidden');
+                    }, 3000);
                 }
             }
 
-            // FIX: sync toggle UI state from loaded data
             syncSettingsUI() {
-                const soundToggle = document.getElementById('sound-toggle');
-                const hapticToggle = document.getElementById('haptic-toggle');
-                if (this.data.settings.soundEnabled) soundToggle.classList.add('active');
-                else soundToggle.classList.remove('active');
-                if (this.data.settings.hapticEnabled) hapticToggle.classList.add('active');
-                else hapticToggle.classList.remove('active');
+                document.getElementById('sound-toggle').classList.toggle('active', this.data.settings.soundEnabled);
+                document.getElementById('haptic-toggle').classList.toggle('active', this.data.settings.hapticEnabled);
             }
 
-            switchView(viewName) {
-                document.querySelectorAll('.view-section').forEach(el => {
-                    el.classList.add('hidden');
-                    el.classList.remove('fade-in');
-                });
-
-                const target = document.getElementById(`view-${viewName}`);
-                if (!target) return;
-                target.classList.remove('hidden');
-                // Force reflow for animation restart
-                void target.offsetWidth;
-                target.classList.add('fade-in');
-
-                document.querySelectorAll('.nav-btn').forEach(btn => {
-                    btn.classList.remove('bg-slate-800', 'text-white');
-                    btn.classList.add('text-slate-300');
-                });
-
-                const activeBtn = document.querySelector(`[data-view="${viewName}"]`);
-                if (activeBtn && viewName !== 'workout') {
-                    activeBtn.classList.add('bg-slate-800', 'text-white');
-                    activeBtn.classList.remove('text-slate-300');
-                }
-
-                if (viewName === 'workout') this.renderWorkoutView();
-                else if (viewName === 'dashboard') this.render();
-
-                // Scroll to top on view change
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+            getCurrentProgram() {
+                return this.data.programs.find(p => p.id === this.data.currentProgramId) || null;
             }
 
-            toggleSettings() {
-                const modal = document.getElementById('settings-modal');
-                const isHidden = modal.style.display === 'none' || modal.style.display === '';
-                // FIX: use style.display directly to avoid conflict between hidden class and flex class
-                if (isHidden) {
-                    modal.style.display = 'flex';
-                } else {
-                    modal.style.display = 'none';
-                }
+            // ─── Navigation ──────────────────────────────────────────────────────────
+            switchView(viewId) {
+                document.querySelectorAll('.view-section').forEach(v => v.classList.add('hidden'));
+                document.getElementById(`view-${viewId}`).classList.remove('hidden');
+                this.currentView = viewId;
+                
+                // Update nav icons
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    const span = link.querySelector('span').innerText.toLowerCase();
+                    const isMatch = (viewId === 'dashboard' && span === 'home') || 
+                                    (viewId === 'program-manager' && span === 'programs') ||
+                                    (viewId === 'history' && span === 'history');
+                    link.classList.toggle('text-cyan-500', isMatch);
+                    link.classList.toggle('text-slate-500', !isMatch);
+                });
+
+                window.scrollTo(0, 0);
                 if (this.data.settings.hapticEnabled) haptic('light');
             }
 
+            // ─── Program Manager ─────────────────────────────────────────────────────
+            renderPrograms() {
+                const container = document.getElementById('programs-list');
+                container.innerHTML = '';
+
+                if (this.data.programs.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-8 text-slate-500">
+                            <p>No programs created yet.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                this.data.programs.forEach(p => {
+                    const isActive = p.id === this.data.currentProgramId;
+                    const div = document.createElement('div');
+                    div.className = `glass-panel rounded-2xl p-4 border ${isActive ? 'border-cyan-500/50 neon-border' : 'border-slate-800'} flex items-center justify-between`;
+                    div.innerHTML = `
+                        <div class="flex-1 cursor-pointer" onclick="app.selectProgram(${p.id})">
+                            <div class="flex items-center gap-2">
+                                <h3 class="font-bold text-white">${p.name}</h3>
+                                ${isActive ? '<span class="text-[10px] bg-cyan-500/20 text-cyan-400 px-2 py-0.5 rounded-full font-black uppercase">Active</span>' : ''}
+                            </div>
+                            <p class="text-xs text-slate-500">${p.daysPerWeek} Days • ${p.exercises.length} Exercises</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="app.openProgramEditor(${p.id})" class="w-8 h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400">
+                                <i class="fas fa-edit text-xs"></i>
+                            </button>
+                            <button onclick="app.deleteProgram(${p.id})" class="w-8 h-8 rounded-lg bg-red-500/10 flex items-center justify-center text-red-500">
+                                <i class="fas fa-trash text-xs"></i>
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+
+            selectProgram(id) {
+                this.data.currentProgramId = id;
+                this.data.currentWeek = 1;
+                this.data.workouts = [];
+                this.saveToStorage();
+                this.render();
+                this.showToast('Program activated!', 'success');
+                this.switchView('dashboard');
+            }
+
+            deleteProgram(id) {
+                if (!confirm('Delete this program and all its history?')) return;
+                this.data.programs = this.data.programs.filter(p => p.id !== id);
+                if (this.data.currentProgramId === id) {
+                    this.data.currentProgramId = this.data.programs.length > 0 ? this.data.programs[0].id : null;
+                    this.data.currentWeek = 1;
+                    this.data.workouts = [];
+                }
+                this.saveToStorage();
+                this.render();
+                this.showToast('Program deleted', 'info');
+            }
+
+            // ─── Program Editor ──────────────────────────────────────────────────────
+            openProgramEditor(id = null) {
+                this.editingProgramId = id;
+                const title = document.getElementById('builder-title');
+                const nameInput = document.getElementById('program-name');
+                const increaseInput = document.getElementById('weekly-increase');
+                const durationInput = document.getElementById('program-duration');
+                const daysSelect = document.getElementById('training-days');
+                
+                // Reset
+                nameInput.value = '';
+                increaseInput.value = '2.5';
+                durationInput.value = '6';
+                daysSelect.value = '4';
+                this.selectedRestTimer = 120;
+                this.updateRestTimerUI();
+
+                if (id) {
+                    const p = this.data.programs.find(prog => prog.id === id);
+                    title.innerText = 'Edit Program';
+                    nameInput.value = p.name;
+                    increaseInput.value = p.weeklyIncrease;
+                    durationInput.value = p.duration;
+                    daysSelect.value = p.daysPerWeek;
+                    this.selectedRestTimer = p.restTimer || 120;
+                    this.updateRestTimerUI();
+                    this.updateBuilderDays(p.exercises);
+                } else {
+                    title.innerText = 'Create Program';
+                    this.updateBuilderDays();
+                }
+
+                this.switchView('builder');
+            }
+
+            updateRestTimerUI() {
+                document.querySelectorAll('#rest-timer-options .rest-option').forEach(opt => {
+                    opt.classList.toggle('selected', parseInt(opt.dataset.value) === this.selectedRestTimer);
+                });
+            }
+
+            selectRestTimer(el) {
+                this.selectedRestTimer = parseInt(el.dataset.value);
+                this.updateRestTimerUI();
+            }
+
+            updateBuilderDays(existingExercises = []) {
+                const container = document.getElementById('builder-days-container');
+                container.innerHTML = '';
+                const days = parseInt(document.getElementById('training-days').value);
+
+                for (let i = 1; i <= days; i++) {
+                    const dayExercises = existingExercises.filter(ex => ex.day === i);
+                    const dayDiv = document.createElement('div');
+                    dayDiv.className = 'bg-slate-900/50 border border-slate-800 rounded-2xl overflow-hidden';
+                    dayDiv.innerHTML = `
+                        <div class="p-4 flex items-center justify-between cursor-pointer hover:bg-slate-800/50 transition-colors" onclick="app.toggleCollapsible(this)">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-500 font-bold text-sm">D${i}</div>
+                                <h4 class="font-bold text-white">Day ${i}</h4>
+                                <span class="text-xs text-slate-500 ex-count">${dayExercises.length} Exercises</span>
+                            </div>
+                            <i class="fas fa-chevron-down text-slate-600 chevron-rotate"></i>
+                        </div>
+                        <div class="collapsible-content px-4 pb-4 space-y-3" id="builder-day-${i}">
+                            <!-- Exercises for this day -->
+                        </div>
+                        <div class="px-4 pb-4">
+                            <button onclick="app.addExerciseToDay(${i})" class="w-full py-2 border border-dashed border-slate-700 rounded-xl text-slate-500 text-xs font-bold hover:border-cyan-500/50 hover:text-cyan-500 transition-all">
+                                <i class="fas fa-plus mr-1"></i> ADD EXERCISE
+                            </button>
+                        </div>
+                    `;
+                    container.appendChild(dayDiv);
+
+                    const dayContent = document.getElementById(`builder-day-${i}`);
+                    dayExercises.forEach(ex => this.addExerciseToDay(i, ex));
+                }
+            }
+
+            toggleCollapsible(header) {
+                const content = header.nextElementSibling;
+                const isExpanded = content.classList.contains('expanded');
+                
+                // Close others in same container if needed (optional)
+                // header.parentElement.parentElement.querySelectorAll('.expanded').forEach(el => el.classList.remove('expanded'));
+                
+                content.classList.toggle('expanded', !isExpanded);
+                header.classList.toggle('expanded', !isExpanded);
+                if (this.data.settings.hapticEnabled) haptic('light');
+            }
+
+            addExerciseToDay(dayNum, data = null) {
+                const container = document.getElementById(`builder-day-${dayNum}`);
+                const id = data?.id || Date.now() + Math.floor(Math.random() * 1000);
+                const weight = data?.startWeight ?? data?.currentWeight ?? 20;
+
+                const div = document.createElement('div');
+                div.className = 'bg-slate-800/30 border border-slate-700/50 rounded-xl overflow-hidden exercise-form-container';
+                div.dataset.id = id;
+                div.dataset.day = dayNum;
+
+                div.innerHTML = `
+                    <div class="p-3 flex items-center justify-between cursor-pointer hover:bg-slate-700/30 transition-colors" onclick="app.toggleCollapsible(this)">
+                        <div class="flex items-center gap-3">
+                            <i class="fas fa-grip-vertical text-slate-700 text-xs"></i>
+                            <span class="font-semibold text-sm text-slate-300 ex-display-name">${data?.name || 'New Exercise'}</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-[10px] text-slate-500 mono">${data ? `${data.sets}x${data.reps} @ ${weight}kg` : ''}</span>
+                            <i class="fas fa-chevron-down text-slate-600 text-[10px] chevron-rotate"></i>
+                        </div>
+                    </div>
+                    <div class="collapsible-content p-3 pt-0 space-y-4 border-t border-slate-800/50">
+                        <div class="grid grid-cols-1 gap-3 mt-3">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Exercise Name</label>
+                                <input type="text" class="ex-name w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none" 
+                                    placeholder="e.g., Bench Press" value="${data?.name || ''}" oninput="this.closest('.exercise-form-container').querySelector('.ex-display-name').innerText = this.value || 'New Exercise'">
+                            </div>
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Sets</label>
+                                    <input type="number" class="ex-sets w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none" value="${data?.sets || '3'}">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Reps</label>
+                                    <input type="number" class="ex-reps w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none" value="${data?.reps || '8'}">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1">Weight</label>
+                                    <input type="number" class="ex-weight w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-cyan-500 focus:outline-none" value="${weight}" step="0.5">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex justify-end">
+                            <button onclick="this.closest('.exercise-form-container').remove(); app.updateExCounts();" class="text-red-500 text-[10px] font-bold uppercase tracking-widest">
+                                <i class="fas fa-trash-alt mr-1"></i> Remove
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+                this.updateExCounts();
+                
+                // If it's a new exercise, expand it
+                if (!data) {
+                    setTimeout(() => {
+                        const header = div.querySelector('.cursor-pointer');
+                        this.toggleCollapsible(header);
+                    }, 10);
+                }
+            }
+
+            updateExCounts() {
+                for (let i = 1; i <= 7; i++) {
+                    const container = document.getElementById(`builder-day-${i}`);
+                    if (container) {
+                        const count = container.querySelectorAll('.exercise-form-container').length;
+                        const badge = container.closest('.bg-slate-900\\/50').querySelector('.ex-count');
+                        if (badge) badge.innerText = `${count} Exercises`;
+                    }
+                }
+            }
+
+            saveProgram() {
+                const name = document.getElementById('program-name').value.trim();
+                const increase = parseFloat(document.getElementById('weekly-increase').value) || 2.5;
+                const duration = parseInt(document.getElementById('program-duration').value) || 6;
+                const daysPerWeek = parseInt(document.getElementById('training-days').value) || 4;
+                const restTimer = this.selectedRestTimer;
+
+                if (!name) {
+                    this.showToast('Enter program name', 'error');
+                    return;
+                }
+
+                const exercises = [];
+                let hasError = false;
+
+                document.querySelectorAll('.exercise-form-container').forEach(form => {
+                    const n = form.querySelector('.ex-name').value.trim();
+                    if (!n) {
+                        hasError = true;
+                        form.querySelector('.ex-name').classList.add('border-red-500');
+                    }
+                    
+                    exercises.push({
+                        id: parseFloat(form.dataset.id),
+                        name: n || 'Unnamed',
+                        day: parseInt(form.dataset.day),
+                        sets: parseInt(form.querySelector('.ex-sets').value) || 3,
+                        reps: parseInt(form.querySelector('.ex-reps').value) || 8,
+                        startWeight: parseFloat(form.querySelector('.ex-weight').value) || 0,
+                        currentWeight: parseFloat(form.querySelector('.ex-weight').value) || 0
+                    });
+                });
+
+                if (exercises.length === 0) {
+                    this.showToast('Add at least one exercise', 'error');
+                    return;
+                }
+
+                if (hasError) {
+                    this.showToast('Fill in all exercise names', 'error');
+                    return;
+                }
+
+                const programData = {
+                    id: this.editingProgramId || Date.now(),
+                    name, weeklyIncrease: increase, duration, daysPerWeek, restTimer,
+                    exercises, created: new Date().toISOString()
+                };
+
+                if (this.editingProgramId) {
+                    const idx = this.data.programs.findIndex(p => p.id === this.editingProgramId);
+                    this.data.programs[idx] = programData;
+                } else {
+                    this.data.programs.push(programData);
+                    this.data.currentProgramId = programData.id;
+                }
+
+                this.saveToStorage();
+                this.showToast('Program saved!', 'success');
+                this.render();
+                this.switchView('dashboard');
+            }
+
+            loadExample() {
+                document.getElementById('program-name').value = 'Strength & Hypertrophy';
+                document.getElementById('weekly-increase').value = '2.5';
+                document.getElementById('program-duration').value = '8';
+                document.getElementById('training-days').value = '4';
+                
+                const exampleEx = [
+                    { name: 'Bench Press', day: 1, sets: 3, reps: 8, weight: 60 },
+                    { name: 'Overhead Press', day: 1, sets: 3, reps: 10, weight: 40 },
+                    { name: 'Squat', day: 2, sets: 3, reps: 5, weight: 80 },
+                    { name: 'Deadlift', day: 2, sets: 3, reps: 5, weight: 100 },
+                    { name: 'Pull Ups', day: 3, sets: 3, reps: 10, weight: 0 },
+                    { name: 'Barbell Row', day: 3, sets: 3, reps: 8, weight: 50 },
+                    { name: 'Leg Press', day: 4, sets: 3, reps: 12, weight: 120 },
+                    { name: 'Calf Raises', day: 4, sets: 4, reps: 15, weight: 60 }
+                ];
+                
+                this.updateBuilderDays(exampleEx);
+                this.showToast('Example loaded', 'info');
+            }
+
+            // ─── Dashboard ───────────────────────────────────────────────────────────
+            render() {
+                const program = this.getCurrentProgram();
+                const dashActive = document.getElementById('dashboard-active-content');
+                const dashEmpty = document.getElementById('dashboard-empty-content');
+                
+                if (!program) {
+                    dashActive.classList.add('hidden');
+                    dashEmpty.classList.remove('hidden');
+                    document.getElementById('display-program-name').innerText = 'No Program Active';
+                    document.getElementById('display-program-meta').innerText = 'Select or create a program to begin';
+                    return;
+                }
+
+                dashActive.classList.remove('hidden');
+                dashEmpty.classList.add('hidden');
+                document.getElementById('display-program-name').innerText = program.name;
+                document.getElementById('display-program-meta').innerText = `${program.daysPerWeek} Days • Week ${this.data.currentWeek}/${program.duration}`;
+
+                // Stats
+                document.getElementById('stat-current-week').innerText = this.data.currentWeek;
+                document.getElementById('stat-total-weeks').innerText = program.duration;
+                document.getElementById('stat-next-increase').innerText = `${program.weeklyIncrease}%`;
+                document.getElementById('stat-workouts-done').innerText = this.data.workouts.length;
+                
+                const progress = (this.data.currentWeek / program.duration) * 100;
+                document.getElementById('week-progress-bar').style.width = `${progress}%`;
+
+                // Volume calc
+                const totalVolume = this.data.workouts.reduce((acc, w) => acc + w.volume, 0);
+                document.getElementById('stat-total-volume').innerHTML = `${totalVolume.toLocaleString()} <span class="text-xs sm:text-sm text-slate-500">kg</span>`;
+
+                // Day Selector
+                const daySelector = document.getElementById('day-selector');
+                daySelector.innerHTML = '';
+                for (let i = 1; i <= program.daysPerWeek; i++) {
+                    const btn = document.createElement('button');
+                    const isDone = this.data.workouts.some(w => w.week === this.data.currentWeek && w.day === i);
+                    btn.className = `day-tab flex-shrink-0 px-6 py-3 rounded-xl font-bold text-sm ${isDone ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-800 text-slate-400'}`;
+                    btn.innerHTML = `Day ${i} ${isDone ? '<i class="fas fa-check-circle ml-1"></i>' : ''}`;
+                    btn.onclick = () => this.renderWorkoutPreview(i);
+                    daySelector.appendChild(btn);
+                }
+
+                // Default to first incomplete day
+                let firstIncomplete = 1;
+                for (let i = 1; i <= program.daysPerWeek; i++) {
+                    if (!this.data.workouts.some(w => w.week === this.data.currentWeek && w.day === i)) {
+                        firstIncomplete = i;
+                        break;
+                    }
+                }
+                this.renderWorkoutPreview(firstIncomplete);
+                this.renderHistory();
+                this.renderPrograms();
+            }
+
+            renderWorkoutPreview(day) {
+                const program = this.getCurrentProgram();
+                const exercises = program.exercises.filter(ex => ex.day === day);
+                const container = document.getElementById('workout-preview');
+                container.innerHTML = '';
+
+                // Update active tab
+                document.querySelectorAll('.day-tab').forEach((btn, idx) => {
+                    btn.classList.toggle('active', idx + 1 === day);
+                });
+
+                this.selectedDay = day;
+
+                exercises.forEach(ex => {
+                    const div = document.createElement('div');
+                    div.className = 'flex items-center justify-between p-3 bg-slate-800/30 rounded-xl border border-slate-800';
+                    div.innerHTML = `
+                        <div class="flex items-center gap-3">
+                            <div class="w-2 h-2 rounded-full bg-cyan-500"></div>
+                            <span class="text-sm font-bold text-white">${ex.name}</span>
+                        </div>
+                        <span class="text-xs text-slate-500 mono">${ex.sets}x${ex.reps} @ ${ex.currentWeight}kg</span>
+                    `;
+                    container.appendChild(div);
+                });
+            }
+
+            // ─── Workout Execution ───────────────────────────────────────────────────
+            startWorkout() {
+                const program = this.getCurrentProgram();
+                const day = this.selectedDay;
+                const exercises = program.exercises.filter(ex => ex.day === day);
+                
+                this.activeWorkout = {
+                    day,
+                    week: this.data.currentWeek,
+                    startTime: Date.now(),
+                    exercises: exercises.map(ex => ({
+                        ...ex,
+                        setsDone: []
+                    }))
+                };
+
+                document.getElementById('workout-day-title').innerText = `Day ${day}`;
+                document.getElementById('workout-program-name').innerText = `${program.name} • Week ${this.data.currentWeek}`;
+                
+                this.renderWorkoutExercises();
+                this.switchView('workout');
+                
+                // Start timer
+                let seconds = 0;
+                this.workoutTimer = setInterval(() => {
+                    seconds++;
+                    document.getElementById('workout-timer').innerText = formatTime(seconds);
+                }, 1000);
+            }
+
+            renderWorkoutExercises() {
+                const container = document.getElementById('workout-exercises');
+                container.innerHTML = '';
+
+                this.activeWorkout.exercises.forEach((ex, exIdx) => {
+                    const card = document.createElement('div');
+                    card.className = 'exercise-card glass-panel rounded-3xl p-5 border border-slate-800';
+                    
+                    let setsHtml = '';
+                    for (let i = 0; i < ex.sets; i++) {
+                        const isDone = ex.setsDone[i];
+                        setsHtml += `
+                            <button onclick="app.toggleSet(${exIdx}, ${i})" 
+                                class="w-full h-14 rounded-2xl border-2 ${isDone ? 'set-complete text-white' : 'border-slate-800 bg-slate-900/50 text-slate-500'} font-black text-lg transition-all flex items-center justify-between px-6">
+                                <span>SET ${i + 1}</span>
+                                <span class="mono">${ex.reps} @ ${ex.currentWeight}kg</span>
+                            </button>
+                        `;
+                    }
+
+                    card.innerHTML = `
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-xl font-black text-white">${ex.name}</h3>
+                            <span class="text-xs font-bold text-cyan-500 uppercase tracking-widest">${ex.sets} Sets</span>
+                        </div>
+                        <div class="space-y-2">
+                            ${setsHtml}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            toggleSet(exIdx, setIdx) {
+                const ex = this.activeWorkout.exercises[exIdx];
+                const wasDone = ex.setsDone[setIdx];
+                ex.setsDone[setIdx] = !wasDone;
+
+                if (this.data.settings.hapticEnabled) haptic(wasDone ? 'light' : 'success');
+                
+                if (!wasDone) {
+                    const program = this.getCurrentProgram();
+                    if (program.restTimer > 0) {
+                        this.startRestTimer(program.restTimer);
+                    }
+                }
+
+                this.renderWorkoutExercises();
+            }
+
+            startRestTimer(seconds) {
+                clearInterval(this.restTimer);
+                this.restRemaining = seconds;
+                const overlay = document.getElementById('rest-timer-overlay');
+                const display = document.getElementById('rest-timer-display');
+                
+                overlay.classList.remove('hidden');
+                display.innerText = formatTime(this.restRemaining);
+
+                this.restTimer = setInterval(() => {
+                    this.restRemaining--;
+                    display.innerText = formatTime(this.restRemaining);
+
+                    if (this.restRemaining <= 0) {
+                        this.skipRestTimer();
+                        if (this.data.settings.soundEnabled) {
+                            const audio = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+                            audio.play().catch(() => {});
+                        }
+                    }
+                }, 1000);
+            }
+
+            adjustRestTimer(seconds) {
+                this.restRemaining = Math.max(0, this.restRemaining + seconds);
+                document.getElementById('rest-timer-display').innerText = formatTime(this.restRemaining);
+                if (this.data.settings.hapticEnabled) haptic('light');
+            }
+
+            skipRestTimer() {
+                clearInterval(this.restTimer);
+                document.getElementById('rest-timer-overlay').classList.add('hidden');
+                if (this.data.settings.hapticEnabled) haptic('medium');
+            }
+
+            completeWorkout() {
+                const done = this.activeWorkout.exercises.every(ex => ex.setsDone.filter(s => s).length >= ex.sets);
+                if (!done && !confirm('Some sets are incomplete. Finish anyway?')) return;
+
+                clearInterval(this.workoutTimer);
+                const duration = Math.floor((Date.now() - this.activeWorkout.startTime) / 1000);
+                
+                // Calc volume
+                let volume = 0;
+                this.activeWorkout.exercises.forEach(ex => {
+                    const completedSets = ex.setsDone.filter(s => s).length;
+                    volume += completedSets * ex.reps * ex.currentWeight;
+                });
+
+                const workoutRecord = {
+                    id: Date.now(),
+                    programId: this.data.currentProgramId,
+                    programName: this.getCurrentProgram().name,
+                    day: this.activeWorkout.day,
+                    week: this.activeWorkout.week,
+                    date: new Date().toISOString(),
+                    duration,
+                    volume,
+                    exercises: this.activeWorkout.exercises.map(ex => ({
+                        name: ex.name,
+                        sets: ex.sets,
+                        reps: ex.reps,
+                        weight: ex.currentWeight,
+                        completed: ex.setsDone.filter(s => s).length
+                    }))
+                };
+
+                this.data.workouts.push(workoutRecord);
+                
+                // Check if week is complete
+                const program = this.getCurrentProgram();
+                const weekWorkouts = this.data.workouts.filter(w => w.week === this.data.currentWeek && w.programId === program.id);
+                if (weekWorkouts.length >= program.daysPerWeek) {
+                    this.advanceWeek();
+                }
+
+                this.saveToStorage();
+                this.showToast('Workout Complete!', 'success');
+                if (this.data.settings.hapticEnabled) haptic('success');
+                this.render();
+                this.switchView('dashboard');
+            }
+
+            advanceWeek() {
+                const program = this.getCurrentProgram();
+                if (this.data.currentWeek < program.duration) {
+                    this.data.currentWeek++;
+                    // Increase weights
+                    program.exercises.forEach(ex => {
+                        ex.currentWeight = parseFloat((ex.currentWeight * (1 + program.weeklyIncrease / 100)).toFixed(1));
+                    });
+                    this.showToast(`Week ${this.data.currentWeek} Started! Weights increased.`, 'success');
+                } else {
+                    this.showToast('Program Complete! Great job.', 'success');
+                }
+            }
+
+            // ─── History & Charts ────────────────────────────────────────────────────
+            renderHistory() {
+                const recentList = document.getElementById('recent-history-list');
+                const fullList = document.getElementById('full-history-list');
+                
+                const sorted = [...this.data.workouts].sort((a, b) => b.id - a.id);
+                
+                const renderItem = (w) => `
+                    <div class="history-item glass-panel rounded-2xl p-4 border border-slate-800 flex items-center justify-between">
+                        <div>
+                            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest">Week ${w.week} • Day ${w.day}</p>
+                            <h4 class="font-bold text-white">${new Date(w.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</h4>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-sm font-black text-cyan-400 mono">${w.volume.toLocaleString()} kg</p>
+                            <p class="text-[10px] text-slate-500 uppercase font-bold">${Math.floor(w.duration / 60)} mins</p>
+                        </div>
+                    </div>
+                `;
+
+                recentList.innerHTML = sorted.slice(0, 3).map(renderItem).join('') || '<p class="text-center py-4 text-slate-600 text-sm">No workouts yet</p>';
+                if (fullList) fullList.innerHTML = sorted.map(renderItem).join('') || '<p class="text-center py-8 text-slate-600">No history found</p>';
+
+                this.updateChart();
+            }
+
+            updateChart() {
+                const ctx = document.getElementById('volume-chart');
+                if (!ctx) return;
+
+                if (this.chart) this.chart.destroy();
+
+                const last7 = [...this.data.workouts].sort((a, b) => a.id - b.id).slice(-7);
+                
+                this.chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: last7.map(w => `W${w.week}D${w.day}`),
+                        datasets: [{
+                            label: 'Volume',
+                            data: last7.map(w => w.volume),
+                            borderColor: '#06b6d4',
+                            backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#06b6d4',
+                            pointRadius: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { display: false },
+                            x: {
+                                grid: { display: false },
+                                ticks: { color: '#475569', font: { size: 10, weight: 'bold' } }
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ─── Settings & Data ─────────────────────────────────────────────────────
             toggleSound() {
                 this.data.settings.soundEnabled = !this.data.settings.soundEnabled;
                 document.getElementById('sound-toggle').classList.toggle('active', this.data.settings.soundEnabled);
@@ -1011,817 +1474,65 @@
                 haptic('medium');
             }
 
-            // FIX: new method to handle rest timer selection (replaces broken has-[:checked] CSS)
-            selectRestTimer(el) {
-                document.querySelectorAll('#rest-timer-options .rest-option').forEach(opt => {
-                    opt.classList.remove('selected');
-                });
-                el.classList.add('selected');
-                this.selectedRestTimer = parseInt(el.dataset.value);
-            }
-
-            // ─── Builder ──────────────────────────────────────────────────────────
-            addExercise(data = null) {
-                const container = document.getElementById('exercises-list');
-                const id = Date.now() + Math.floor(Math.random() * 1000);
-
-                const div = document.createElement('div');
-                div.className = 'bg-slate-800/50 border border-slate-700 rounded-xl p-4 slide-in exercise-form';
-                div.dataset.id = id;
-
-                // FIX: use program's daysPerWeek if available, otherwise fall back to 4
-                const days = this.data.program?.daysPerWeek ||
-                    parseInt(document.getElementById('training-days')?.value) || 4;
-                let dayOpts = '';
-                for (let i = 1; i <= days; i++) {
-                    dayOpts += `<option value="${i}" ${data?.day === i ? 'selected' : ''}>Day ${i}</option>`;
-                }
-
-                // FIX: use data.weight (from loadExample) or data.startWeight
-                const weight = data?.weight ?? data?.startWeight ?? 20;
-
-                div.innerHTML = `
-                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
-                        <div class="sm:col-span-4">
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Exercise</label>
-                            <input type="text" class="ex-name w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none"
-                                placeholder="e.g., Bench Press" value="${data?.name || ''}">
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Day</label>
-                            <div class="relative">
-                                <select class="ex-day w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none appearance-none">
-                                    ${dayOpts}
-                                </select>
-                                <i class="fas fa-chevron-down absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none text-xs"></i>
-                            </div>
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Sets</label>
-                            <input type="number" class="ex-sets w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none" inputmode="numeric"
-                                value="${data?.sets || '3'}" min="1" max="10">
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Reps</label>
-                            <input type="number" class="ex-reps w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none" inputmode="numeric"
-                                value="${data?.reps || '8'}" min="1">
-                        </div>
-                        <div class="sm:col-span-2">
-                            <label class="block text-xs font-semibold text-slate-400 mb-1">Weight (kg)</label>
-                            <input type="number" class="ex-weight w-full bg-slate-900 border border-slate-600 rounded-lg px-3 py-2 text-white focus:border-cyan-500 focus:outline-none" inputmode="decimal"
-                                value="${weight}" step="0.5">
-                        </div>
-                    </div>
-                    <div class="mt-3 flex justify-end">
-                        <button onclick="this.closest('.exercise-form').remove(); if(app.data.settings.hapticEnabled) haptic('light')"
-                            class="text-red-400 text-xs flex items-center gap-1 px-2 py-1 rounded active:bg-red-400/10 transition-colors">
-                            <i class="fas fa-trash"></i> Remove
-                        </button>
-                    </div>
-                `;
-                container.appendChild(div);
-            }
-
-            saveProgram() {
-                const name = document.getElementById('program-name').value.trim();
-                const increase = parseFloat(document.getElementById('weekly-increase').value) || 2.5;
-                const duration = parseInt(document.getElementById('program-duration').value) || 6;
-                const daysPerWeek = parseInt(document.getElementById('training-days').value) || 4;
-                // FIX: use tracked selectedRestTimer instead of broken radio query
-                const restTimer = this.selectedRestTimer;
-
-                if (!name) {
-                    this.showToast('Enter program name', 'error');
-                    document.getElementById('program-name').focus();
-                    return;
-                }
-
-                const forms = document.querySelectorAll('.exercise-form');
-                if (forms.length === 0) {
-                    this.showToast('Add at least one exercise', 'error');
-                    return;
-                }
-
-                const exercises = [];
-                let hasError = false;
-
-                forms.forEach(form => {
-                    const n = form.querySelector('.ex-name').value.trim();
-                    if (!n) {
-                        hasError = true;
-                        form.querySelector('.ex-name').classList.add('border-red-500');
-                    } else {
-                        form.querySelector('.ex-name').classList.remove('border-red-500');
-                    }
-
-                    const w = parseFloat(form.querySelector('.ex-weight').value) || 0;
-                    exercises.push({
-                        id: Date.now() + Math.random(),
-                        name: n || 'Unnamed',
-                        day: parseInt(form.querySelector('.ex-day').value),
-                        sets: parseInt(form.querySelector('.ex-sets').value) || 3,
-                        reps: parseInt(form.querySelector('.ex-reps').value) || 8,
-                        startWeight: w,
-                        currentWeight: w
-                    });
-                });
-
-                if (hasError) {
-                    this.showToast('Fill in all exercise names', 'error');
-                    return;
-                }
-
-                this.data.program = {
-                    name, weeklyIncrease: increase, duration, daysPerWeek, restTimer,
-                    exercises, created: new Date().toISOString()
-                };
-                this.data.currentWeek = 1;
-                this.data.workouts = [];
-
-                this.saveToStorage();
-                this.showToast('Program saved!', 'success');
-                if (this.data.settings.hapticEnabled) haptic('success');
-                this.render();
-                this.switchView('dashboard');
-            }
-
-            loadExample() {
-                document.getElementById('program-name').value = 'Strength & Hypertrophy';
-                document.getElementById('weekly-increase').value = '2.5';
-                document.getElementById('program-duration').value = '6';
-                document.getElementById('training-days').value = '4';
-
-                const examples = [
-                    { name: 'Barbell Squat', day: 1, sets: 4, reps: 6, weight: 80 },
-                    { name: 'Romanian Deadlift', day: 1, sets: 3, reps: 8, weight: 60 },
-                    { name: 'Leg Press', day: 1, sets: 3, reps: 12, weight: 120 },
-                    { name: 'Bench Press', day: 2, sets: 4, reps: 8, weight: 60 },
-                    { name: 'Overhead Press', day: 2, sets: 3, reps: 8, weight: 40 },
-                    { name: 'Incline DB Press', day: 2, sets: 3, reps: 10, weight: 25 },
-                    { name: 'Deadlift', day: 3, sets: 3, reps: 5, weight: 100 },
-                    { name: 'Front Squat', day: 3, sets: 3, reps: 8, weight: 50 },
-                    { name: 'Lunges', day: 3, sets: 3, reps: 10, weight: 20 },
-                    { name: 'Barbell Row', day: 4, sets: 4, reps: 8, weight: 50 },
-                    { name: 'Pull-ups', day: 4, sets: 3, reps: 8, weight: 0 },
-                    { name: 'Face Pulls', day: 4, sets: 3, reps: 15, weight: 15 }
-                ];
-
-                document.getElementById('exercises-list').innerHTML = '';
-                examples.forEach(ex => this.addExercise(ex));
-            }
-
-            clearBuilder() {
-                if (confirm('Clear all exercises?')) {
-                    document.getElementById('exercises-list').innerHTML = '';
-                    document.getElementById('program-name').value = '';
-                }
-            }
-
-            // ─── Workout ──────────────────────────────────────────────────────────
-            renderWorkoutView() {
-                if (!this.data.program) return;
-
-                const selector = document.getElementById('day-selector');
-                selector.innerHTML = '';
-
-                for (let i = 1; i <= this.data.program.daysPerWeek; i++) {
-                    const btn = document.createElement('button');
-                    btn.className = `day-tab flex-shrink-0 px-5 py-3 rounded-xl font-bold text-sm whitespace-nowrap transition-all ${this.currentDay === i ? 'active' : 'bg-slate-800 text-slate-400 border border-slate-700'}`;
-                    btn.textContent = `Day ${i}`;
-                    btn.onclick = () => {
-                        this.selectDay(i);
-                        if (this.data.settings.hapticEnabled) haptic('light');
-                    };
-                    selector.appendChild(btn);
-                }
-
-                if (this.currentDay === 0) this.selectDay(1);
-                else this.selectDay(this.currentDay);
-            }
-
-            selectDay(day) {
-                this.currentDay = day;
-
-                document.querySelectorAll('.day-tab').forEach((tab, idx) => {
-                    if (idx + 1 === day) {
-                        tab.classList.add('active');
-                        tab.classList.remove('bg-slate-800', 'text-slate-400', 'border', 'border-slate-700');
-                    } else {
-                        tab.classList.remove('active');
-                        tab.classList.add('bg-slate-800', 'text-slate-400', 'border', 'border-slate-700');
-                    }
-                });
-
-                document.getElementById('workout-day-title').textContent = `Day ${day}`;
-                document.getElementById('workout-week-badge').textContent = `Week ${this.data.currentWeek}`;
-                document.getElementById('workout-date').textContent = new Date().toLocaleDateString('en-US', {
-                    weekday: 'short', month: 'short', day: 'numeric'
-                });
-
-                this.renderExercisesForDay(day);
-                this.startTimer();
-                document.getElementById('complete-workout-btn').classList.remove('hidden');
-            }
-
-            renderExercisesForDay(day) {
-                const container = document.getElementById('workout-exercises');
-                container.innerHTML = '';
-
-                const dayExercises = this.data.program.exercises.filter(ex => ex.day === day);
-
-                if (dayExercises.length === 0) {
-                    container.innerHTML = `
-                        <div class="text-center py-12 glass-panel rounded-2xl border border-slate-800 border-dashed">
-                            <i class="fas fa-bed text-4xl text-slate-600 mb-4"></i>
-                            <p class="text-slate-400">Rest day - no exercises</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                dayExercises.forEach(exercise => {
-                    const card = document.createElement('div');
-                    card.className = 'glass-panel rounded-2xl p-4 sm:p-6 border border-slate-800 exercise-card';
-
-                    const prev = this.getPreviousPerformance(exercise.name);
-
-                    let setsHtml = '';
-                    for (let i = 0; i < exercise.sets; i++) {
-                        const prevSet = prev?.sets[i];
-                        const weight = prevSet ? prevSet.weight : exercise.currentWeight;
-                        const reps = prevSet ? prevSet.reps : exercise.reps;
-
-                        setsHtml += `
-                            <div class="set-row flex items-center gap-2 sm:gap-3 mb-2 p-2 sm:p-3 rounded-xl bg-slate-900/50 border border-slate-700 transition-all active:scale-[0.98]" data-set="${i}">
-                                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-slate-800 flex items-center justify-center text-slate-400 font-bold text-xs sm:text-sm flex-shrink-0">
-                                    ${i + 1}
-                                </div>
-                                <div class="flex-1 grid grid-cols-2 gap-2 sm:gap-3">
-                                    <div class="relative">
-                                        <input type="number"
-                                            class="set-weight w-full bg-slate-950 border border-slate-700 rounded-lg px-2 sm:px-3 py-2 text-center font-bold text-cyan-400 focus:border-cyan-500 focus:outline-none mono"
-                                            value="${weight}" step="0.5" inputmode="decimal">
-                                        <span class="absolute right-2 top-2 text-[10px] sm:text-xs text-slate-600 pointer-events-none">kg</span>
-                                    </div>
-                                    <div class="relative">
-                                        <input type="number"
-                                            class="set-reps w-full bg-slate-950 border border-slate-700 rounded-lg px-2 sm:px-3 py-2 text-center font-bold text-white focus:border-cyan-500 focus:outline-none mono"
-                                            value="${reps}" inputmode="numeric">
-                                        <span class="absolute right-2 top-2 text-[10px] sm:text-xs text-slate-600 pointer-events-none">reps</span>
-                                    </div>
-                                </div>
-                                <button onclick="app.toggleSetComplete(this)"
-                                    class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg border-2 border-slate-600 flex items-center justify-center active:border-emerald-500 active:bg-emerald-500/10 transition-all flex-shrink-0"
-                                    title="Complete set">
-                                    <i class="fas fa-check text-slate-600 text-sm"></i>
-                                </button>
-                            </div>
-                        `;
-                    }
-
-                    card.innerHTML = `
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="min-w-0 flex-1">
-                                <h3 class="text-lg sm:text-xl font-bold text-white mb-1 truncate">${exercise.name}</h3>
-                                <div class="flex flex-wrap items-center gap-2 text-xs sm:text-sm">
-                                    <span class="text-cyan-400 font-mono bg-cyan-400/10 px-2 py-0.5 rounded">${exercise.sets} sets</span>
-                                    <span class="text-slate-500">×</span>
-                                    <span class="text-slate-400">${exercise.reps} reps</span>
-                                    <span class="text-slate-600 hidden sm:inline">|</span>
-                                    <span class="text-emerald-400 font-mono hidden sm:inline">Target: ${exercise.currentWeight}kg</span>
-                                </div>
-                            </div>
-                            ${prev ? `
-                                <div class="text-right text-xs text-slate-500 flex-shrink-0 ml-2">
-                                    <div class="text-cyan-400 font-bold">${prev.totalVolume}kg</div>
-                                    <div>${prev.date}</div>
-                                </div>
-                            ` : '<div class="text-xs text-slate-600 italic flex-shrink-0">New</div>'}
-                        </div>
-                        <div class="space-y-1 sm:space-y-2">
-                            ${setsHtml}
-                        </div>
-                    `;
-                    container.appendChild(card);
-                });
-            }
-
-            getPreviousPerformance(name) {
-                const relevant = this.data.workouts
-                    .filter(w => w.exercises.some(e => e.name === name))
-                    .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                if (relevant.length === 0) return null;
-
-                const last = relevant[0];
-                const ex = last.exercises.find(e => e.name === name);
-                if (!ex) return null;
-                const volume = ex.sets.reduce((sum, s) => sum + (s.weight * s.reps), 0);
-
-                return {
-                    date: new Date(last.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-                    sets: ex.sets,
-                    totalVolume: volume.toFixed(0)
-                };
-            }
-
-            toggleSetComplete(btn) {
-                const row = btn.closest('.set-row');
-                const isComplete = row.classList.contains('set-complete');
-
-                if (isComplete) {
-                    row.classList.remove('set-complete');
-                    btn.innerHTML = '<i class="fas fa-check text-slate-600 text-sm"></i>';
-                    btn.classList.remove('border-emerald-500', 'bg-emerald-500');
-                    btn.classList.add('border-slate-600');
+            showToast(msg, type = 'success') {
+                const toast = document.getElementById('toast');
+                const message = document.getElementById('toast-message');
+                const icon = document.getElementById('toast-icon');
+                
+                message.innerText = msg;
+                toast.classList.remove('hidden-toast');
+                toast.classList.add('visible-toast');
+                
+                if (type === 'error') {
+                    icon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+                    icon.className = 'w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center text-red-400';
                 } else {
-                    row.classList.add('set-complete');
-                    btn.innerHTML = '<i class="fas fa-check text-white text-sm"></i>';
-                    btn.classList.remove('border-slate-600');
-                    btn.classList.add('border-emerald-500', 'bg-emerald-500');
-
-                    if (this.data.settings.hapticEnabled) haptic('medium');
-
-                    if (this.data.program.restTimer > 0) {
-                        this.startRestTimer();
-                    }
-                }
-            }
-
-            startRestTimer() {
-                if (this.restTimerInterval) clearInterval(this.restTimerInterval);
-
-                this.restRemaining = this.data.program.restTimer;
-                const overlay = document.getElementById('rest-timer-overlay');
-                const display = document.getElementById('rest-timer-display');
-
-                // FIX: use style.display to show flex overlay
-                overlay.style.display = 'flex';
-
-                const update = () => {
-                    const mins = Math.floor(this.restRemaining / 60).toString().padStart(2, '0');
-                    const secs = (this.restRemaining % 60).toString().padStart(2, '0');
-                    display.textContent = `${mins}:${secs}`;
-                };
-
-                update();
-
-                this.restTimerInterval = setInterval(() => {
-                    this.restRemaining--;
-                    update();
-
-                    if (this.restRemaining <= 0) {
-                        this.skipRestTimer();
-                        if (this.data.settings.soundEnabled) this.playBeep();
-                        if (this.data.settings.hapticEnabled) haptic('success');
-                    }
-                }, 1000);
-            }
-
-            // FIX: adjustRestTimer now updates state (this.restRemaining) not just DOM
-            adjustRestTimer(seconds) {
-                this.restRemaining = Math.max(0, this.restRemaining + seconds);
-                const mins = Math.floor(this.restRemaining / 60).toString().padStart(2, '0');
-                const secs = (this.restRemaining % 60).toString().padStart(2, '0');
-                document.getElementById('rest-timer-display').textContent = `${mins}:${secs}`;
-            }
-
-            skipRestTimer() {
-                if (this.restTimerInterval) {
-                    clearInterval(this.restTimerInterval);
-                    this.restTimerInterval = null;
-                }
-                // FIX: use style.display to hide flex overlay
-                document.getElementById('rest-timer-overlay').style.display = 'none';
-            }
-
-            playBeep() {
-                try {
-                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
-
-                    osc.frequency.value = 880;
-                    osc.type = 'sine';
-                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
-
-                    osc.start(ctx.currentTime);
-                    osc.stop(ctx.currentTime + 0.3);
-                } catch (e) { /* AudioContext may require user gesture on iOS */ }
-            }
-
-            startTimer() {
-                if (this.timer) clearInterval(this.timer);
-                this.timerSeconds = 0;
-
-                this.timer = setInterval(() => {
-                    this.timerSeconds++;
-                    const mins = Math.floor(this.timerSeconds / 60).toString().padStart(2, '0');
-                    const secs = (this.timerSeconds % 60).toString().padStart(2, '0');
-                    const el = document.getElementById('workout-timer');
-                    if (el) el.textContent = `${mins}:${secs}`;
-                }, 1000);
-            }
-
-            completeWorkout() {
-                const completedSets = document.querySelectorAll('.set-complete').length;
-                if (completedSets === 0) {
-                    if (!confirm('No sets completed. Finish anyway?')) return;
+                    icon.innerHTML = '<i class="fas fa-check"></i>';
+                    icon.className = 'w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400';
                 }
 
-                const workoutData = {
-                    id: Date.now(),
-                    date: new Date().toISOString(),
-                    week: this.data.currentWeek,
-                    day: this.currentDay,
-                    duration: this.timerSeconds,
-                    exercises: []
-                };
-
-                document.querySelectorAll('.exercise-card').forEach(card => {
-                    // FIX: use textContent.trim() to safely get exercise name
-                    const nameEl = card.querySelector('h3');
-                    const name = nameEl ? nameEl.textContent.trim() : 'Unknown';
-                    const sets = [];
-
-                    card.querySelectorAll('.set-row').forEach(row => {
-                        sets.push({
-                            weight: parseFloat(row.querySelector('.set-weight').value) || 0,
-                            reps: parseInt(row.querySelector('.set-reps').value) || 0,
-                            completed: row.classList.contains('set-complete')
-                        });
-                    });
-
-                    workoutData.exercises.push({ name, sets });
-                });
-
-                this.data.workouts.push(workoutData);
-
-                const isLastDay = this.currentDay === this.data.program.daysPerWeek;
-
-                if (isLastDay && this.data.currentWeek < this.data.program.duration) {
-                    this.progressToNextWeek();
-                    this.showToast(`Week ${this.data.currentWeek} complete! Weights increased`, 'success');
-                } else {
-                    this.showToast('Workout saved!', 'success');
-                }
-
-                if (this.data.settings.hapticEnabled) haptic('success');
-                this.saveToStorage();
-                if (this.timer) { clearInterval(this.timer); this.timer = null; }
-
-                if (isLastDay) {
-                    this.switchView('dashboard');
-                } else if (this.currentDay < this.data.program.daysPerWeek) {
-                    setTimeout(() => this.selectDay(this.currentDay + 1), 500);
-                }
+                setTimeout(() => {
+                    toast.classList.remove('visible-toast');
+                    toast.classList.add('hidden-toast');
+                }, 3000);
             }
 
-            progressToNextWeek() {
-                const increase = 1 + (this.data.program.weeklyIncrease / 100);
-                this.data.program.exercises.forEach(ex => {
-                    const newWeight = ex.currentWeight * increase;
-                    ex.currentWeight = ex.currentWeight < 20
-                        ? Math.round(newWeight * 2) / 2
-                        : Math.round(newWeight);
-                });
-                this.data.currentWeek++;
-            }
-
-            resetWeek() {
-                if (!this.data.program) return;
-                if (!confirm('Reset to Week 1? This restores starting weights.')) return;
-
-                this.data.currentWeek = 1;
-                this.data.program.exercises.forEach(ex => {
-                    ex.currentWeight = ex.startWeight;
-                });
-
-                this.saveToStorage();
-                this.render();
-                this.showToast('Reset to Week 1', 'success');
-            }
-
-            // ─── Dashboard ────────────────────────────────────────────────────────
-            render() {
-                if (!this.data.program) {
-                    this.renderEmptyState();
-                    return;
-                }
-
-                document.getElementById('stat-current-week').textContent = this.data.currentWeek;
-                document.getElementById('stat-total-weeks').textContent = this.data.program.duration;
-                document.getElementById('week-progress-bar').style.width =
-                    `${(this.data.currentWeek / this.data.program.duration) * 100}%`;
-                document.getElementById('stat-next-increase').textContent = `${this.data.program.weeklyIncrease}%`;
-                document.getElementById('schedule-week-num').textContent = this.data.currentWeek;
-
-                let totalVolume = 0;
-                let workoutCount = 0;
-
-                this.data.workouts.forEach(w => {
-                    const vol = w.exercises.reduce((sum, ex) =>
-                        sum + ex.sets.reduce((s, set) => s + (set.completed ? set.weight * set.reps : 0), 0), 0);
-                    totalVolume += vol;
-                    workoutCount++;
-                });
-
-                document.getElementById('stat-total-volume').innerHTML =
-                    `${Math.round(totalVolume).toLocaleString()} <span class="text-xs sm:text-sm text-slate-500">kg</span>`;
-                document.getElementById('stat-workouts-done').textContent = workoutCount;
-
-                this.renderSchedule();
-                this.renderRecentWorkouts();
-                this.updateChart();
-            }
-
-            renderEmptyState() {
-                document.getElementById('schedule-list').innerHTML = `
-                    <div class="text-center py-12 border-2 border-dashed border-slate-800 rounded-xl">
-                        <i class="fas fa-dumbbell text-4xl text-slate-700 mb-4"></i>
-                        <p class="text-slate-500 mb-4">No active program</p>
-                        <button onclick="app.switchView('builder')" class="px-6 py-2 bg-cyan-600 rounded-lg font-semibold text-white">
-                            Create Program
-                        </button>
-                    </div>
-                `;
-            }
-
-            renderSchedule() {
-                const container = document.getElementById('schedule-list');
-                container.innerHTML = '';
-
-                for (let day = 1; day <= this.data.program.daysPerWeek; day++) {
-                    const dayExercises = this.data.program.exercises.filter(ex => ex.day === day);
-                    const isToday = this.currentDay === day;
-
-                    const div = document.createElement('div');
-                    div.className = `p-3 sm:p-4 rounded-xl border transition-all active:scale-[0.98] cursor-pointer ${isToday ? 'bg-cyan-500/10 border-cyan-500/30' : 'bg-slate-800/30 border-slate-700'}`;
-                    div.onclick = () => {
-                        this.switchView('workout');
-                        this.selectDay(day);
-                    };
-
-                    div.innerHTML = `
-                        <div class="flex justify-between items-start mb-2">
-                            <h4 class="font-bold ${isToday ? 'text-cyan-400' : 'text-white'} text-sm sm:text-base flex items-center gap-2">
-                                Day ${day}
-                                ${isToday ? '<span class="text-[10px] bg-cyan-500 text-slate-900 px-1.5 py-0.5 rounded font-bold">NOW</span>' : ''}
-                            </h4>
-                            <i class="fas fa-chevron-right text-xs text-slate-600"></i>
-                        </div>
-                        <div class="space-y-1">
-                            ${dayExercises.length === 0 ?
-                                '<p class="text-xs text-slate-500 italic">Rest day</p>' :
-                                dayExercises.map(ex => `
-                                    <div class="flex justify-between items-center text-xs sm:text-sm">
-                                        <span class="text-slate-300 truncate flex-1 mr-2">${ex.name}</span>
-                                        <span class="text-cyan-400 font-mono bg-slate-900/50 px-2 py-0.5 rounded text-xs flex-shrink-0">
-                                            ${ex.currentWeight}kg
-                                        </span>
-                                    </div>
-                                `).join('')
-                            }
-                        </div>
-                    `;
-                    container.appendChild(div);
-                }
-            }
-
-            renderRecentWorkouts() {
-                const container = document.getElementById('recent-workouts-list');
-
-                if (this.data.workouts.length === 0) {
-                    container.innerHTML = '<p class="text-slate-500 text-center py-8 text-xs sm:text-sm">No workouts yet</p>';
-                    return;
-                }
-
-                const sorted = [...this.data.workouts].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 10);
-
-                container.innerHTML = sorted.map(w => {
-                    const date = new Date(w.date);
-                    const volume = w.exercises.reduce((sum, ex) =>
-                        sum + ex.sets.reduce((s, set) => s + (set.completed ? set.weight * set.reps : 0), 0), 0);
-                    const completed = w.exercises.reduce((sum, ex) => sum + ex.sets.filter(s => s.completed).length, 0);
-                    const total = w.exercises.reduce((sum, ex) => sum + ex.sets.length, 0);
-
-                    return `
-                        <div class="history-item bg-slate-800/30 rounded-lg p-3 border-l-2 border-slate-700">
-                            <div class="flex justify-between items-start">
-                                <div class="min-w-0 flex-1">
-                                    <div class="font-semibold text-white text-xs sm:text-sm">Week ${w.week} &bull; Day ${w.day}</div>
-                                    <div class="text-[10px] sm:text-xs text-slate-500">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</div>
-                                </div>
-                                <div class="text-right flex-shrink-0 ml-2">
-                                    <div class="text-emerald-400 font-mono text-xs sm:text-sm font-bold">${Math.round(volume)}kg</div>
-                                    <div class="text-[10px] sm:text-xs text-slate-500">${completed}/${total} sets</div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-
-            // ─── Chart ────────────────────────────────────────────────────────────
-            initChart() {
-                const ctx = document.getElementById('progressChart').getContext('2d');
-
-                Chart.defaults.color = '#64748b';
-                Chart.defaults.borderColor = '#1e293b';
-
-                this.chart = new Chart(ctx, {
-                    type: 'line',
-                    data: { labels: [], datasets: [] },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        interaction: { mode: 'index', intersect: false },
-                        plugins: {
-                            legend: {
-                                position: 'top',
-                                labels: { usePointStyle: true, padding: 15, font: { size: 10 } }
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                                titleColor: '#22d3ee',
-                                bodyColor: '#e2e8f0',
-                                borderColor: '#1e293b',
-                                borderWidth: 1,
-                                padding: 10,
-                                callbacks: {
-                                    label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y}kg`
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: false,
-                                grid: { color: 'rgba(30, 41, 59, 0.5)' },
-                                ticks: { callback: v => v + 'kg', font: { size: 10 } }
-                            },
-                            x: {
-                                grid: { display: false },
-                                ticks: { font: { size: 10 } }
-                            }
-                        },
-                        elements: {
-                            line: { tension: 0.4, borderWidth: 2 },
-                            point: { radius: 3, hoverRadius: 5, borderWidth: 2, backgroundColor: '#0f172a' }
-                        }
-                    }
-                });
-            }
-
-            toggleChartType(type) {
-                this.chartType = type;
-                this.chart.config.type = type;
-
-                document.getElementById('chart-line-btn').className =
-                    type === 'line' ? 'p-2 rounded-md text-xs bg-slate-700 text-white' : 'p-2 rounded-md text-xs text-slate-500 hover:text-white';
-                document.getElementById('chart-bar-btn').className =
-                    type === 'bar' ? 'p-2 rounded-md text-xs bg-slate-700 text-white' : 'p-2 rounded-md text-xs text-slate-500 hover:text-white';
-
-                this.chart.update();
-            }
-
-            updateChart() {
-                if (!this.data.program || !this.chart) return;
-
-                const labels = [];
-                for (let i = 1; i <= this.data.program.duration; i++) labels.push(`W${i}`);
-
-                const datasets = [];
-                const colors = ['#22d3ee', '#34d399', '#a78bfa', '#fbbf24', '#f472b6', '#fb7185', '#818cf8', '#2dd4bf'];
-
-                const exerciseMap = new Map();
-                this.data.program.exercises.forEach(ex => {
-                    if (!exerciseMap.has(ex.name)) {
-                        exerciseMap.set(ex.name, { startWeight: ex.startWeight, currentWeek: this.data.currentWeek });
-                    }
-                });
-
-                let idx = 0;
-                exerciseMap.forEach((data, name) => {
-                    const points = [];
-                    let weight = data.startWeight;
-                    const increase = 1 + (this.data.program.weeklyIncrease / 100);
-
-                    for (let w = 1; w <= this.data.program.duration; w++) {
-                        if (w <= data.currentWeek) {
-                            points.push(weight);
-                            weight = weight < 20 ? Math.round(weight * increase * 2) / 2 : Math.round(weight * increase);
-                        } else {
-                            points.push(null);
-                        }
-                    }
-
-                    datasets.push({
-                        label: name,
-                        data: points,
-                        borderColor: colors[idx % colors.length],
-                        backgroundColor: colors[idx % colors.length] + '30',
-                        borderWidth: 2,
-                        fill: this.chartType === 'bar',
-                        spanGaps: true
-                    });
-                    idx++;
-                });
-
-                this.chart.data.labels = labels;
-                this.chart.data.datasets = datasets;
-                this.chart.update();
-            }
-
-            // ─── Data Management ──────────────────────────────────────────────────
             exportData() {
-                const dataStr = JSON.stringify(this.data, null, 2);
-                const blob = new Blob([dataStr], { type: 'application/json' });
+                const blob = new Blob([JSON.stringify(this.data)], { type: 'application/json' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `irontrack-backup-${new Date().toISOString().split('T')[0]}.json`;
-                document.body.appendChild(a);
+                a.download = `irontrack_backup_${new Date().toISOString().split('T')[0]}.json`;
                 a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                this.showToast('Backup saved to Downloads', 'success');
-                this.toggleSettings();
+                this.showToast('Data exported', 'success');
             }
 
-            importData(input) {
-                const file = input.files[0];
+            importData(event) {
+                const file = event.target.files[0];
                 if (!file) return;
-
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     try {
-                        const data = JSON.parse(e.target.result);
-                        if (data.program && data.currentWeek !== undefined) {
-                            this.data = data;
+                        const imported = JSON.parse(e.target.result);
+                        if (imported.programs && Array.isArray(imported.programs)) {
+                            this.data = imported;
                             this.saveToStorage();
                             this.render();
-                            this.showToast('Data restored!', 'success');
-                            this.toggleSettings();
+                            this.showToast('Data imported!', 'success');
                         } else {
                             throw new Error('Invalid format');
                         }
                     } catch (err) {
-                        this.showToast('Import failed: ' + err.message, 'error');
+                        this.showToast('Import failed: Invalid file', 'error');
                     }
                 };
                 reader.readAsText(file);
-                input.value = '';
             }
 
-            clearAllData() {
-                if (confirm('Erase ALL data permanently?')) {
-                    localStorage.removeItem('irontrack_data_v2');
-                    this.data = {
-                        program: null, currentWeek: 1, workouts: [],
-                        settings: { restTimer: 120, soundEnabled: true, hapticEnabled: true }
-                    };
-                    this.render();
-                    this.showToast('All data erased', 'success');
-                    this.toggleSettings();
-                    this.switchView('builder');
-                }
-            }
-
-            // FIX: rewritten toast to use CSS class toggle instead of broken Tailwind translate classes
-            showToast(message, type = 'success') {
-                const toast = document.getElementById('toast');
-                const title = document.getElementById('toast-title');
-                const msg = document.getElementById('toast-message');
-                const icon = document.getElementById('toast-icon');
-                const panel = toast.querySelector('.glass-panel');
-
-                title.textContent = type === 'error' ? 'Error' : 'Success';
-                msg.textContent = message;
-
-                if (type === 'error') {
-                    icon.className = 'fas fa-exclamation-circle text-red-400 text-lg';
-                    panel.classList.remove('border-cyan-500');
-                    panel.classList.add('border-red-500');
-                } else {
-                    icon.className = 'fas fa-check-circle text-cyan-400 text-lg';
-                    panel.classList.remove('border-red-500');
-                    panel.classList.add('border-cyan-500');
-                }
-
-                // Clear any existing hide timeout
-                if (this._toastTimeout) clearTimeout(this._toastTimeout);
-
-                toast.classList.remove('hidden-toast');
-                toast.classList.add('visible-toast');
-
-                this._toastTimeout = setTimeout(() => {
-                    toast.classList.remove('visible-toast');
-                    toast.classList.add('hidden-toast');
-                }, 2500);
+            resetAllData() {
+                if (!confirm('This will delete ALL programs and history. Are you sure?')) return;
+                localStorage.removeItem('irontrack_data_v2');
+                location.reload();
             }
         }
 
