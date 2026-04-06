@@ -1113,24 +1113,55 @@
             }
 
             loadExample() {
-                document.getElementById('program-name').value = 'Strength & Hypertrophy';
+                document.getElementById('program-name').value = 'Push/Pull/Legs/Upper/Full Body';
                 document.getElementById('weekly-increase').value = '2.5';
                 document.getElementById('program-duration').value = '8';
-                document.getElementById('training-days').value = '4';
+                document.getElementById('training-days').value = '5';
                 
                 const exampleEx = [
-                    { name: 'Bench Press', day: 1, sets: 3, reps: 8, weight: 60 },
-                    { name: 'Overhead Press', day: 1, sets: 3, reps: 10, weight: 40 },
-                    { name: 'Squat', day: 2, sets: 3, reps: 5, weight: 80 },
-                    { name: 'Deadlift', day: 2, sets: 3, reps: 5, weight: 100 },
-                    { name: 'Pull Ups', day: 3, sets: 3, reps: 10, weight: 0 },
-                    { name: 'Barbell Row', day: 3, sets: 3, reps: 8, weight: 50 },
-                    { name: 'Leg Press', day: 4, sets: 3, reps: 12, weight: 120 },
-                    { name: 'Calf Raises', day: 4, sets: 4, reps: 15, weight: 60 }
+                    // Monday: Push (Chest, Shoulders, Triceps)
+                    { name: 'Incline Bench Press', day: 1, sets: 4, reps: 8, weight: 70 },
+                    { name: 'Flat Dumbbell Press', day: 1, sets: 3, reps: 10, weight: 50 },
+                    { name: 'Overhead Shoulder Press', day: 1, sets: 3, reps: 12, weight: 40 },
+                    { name: 'Lateral Raises', day: 1, sets: 3, reps: 12, weight: 15 },
+                    { name: 'Tricep Dips', day: 1, sets: 3, reps: 10, weight: 0 },
+                    { name: 'Cable Tricep Pushdowns', day: 1, sets: 3, reps: 10, weight: 30 },
+                    
+                    // Tuesday: Pull (Back, Rear Delts, Biceps)
+                    { name: 'Barbell Rows', day: 2, sets: 4, reps: 8, weight: 80 },
+                    { name: 'Pull-Ups', day: 2, sets: 3, reps: 10, weight: 0 },
+                    { name: 'Lat Pulldown', day: 2, sets: 3, reps: 12, weight: 60 },
+                    { name: 'Reverse Fly (Rear Delts)', day: 2, sets: 3, reps: 12, weight: 20 },
+                    { name: 'Barbell Curls', day: 2, sets: 3, reps: 10, weight: 35 },
+                    { name: 'Hammer Curls', day: 2, sets: 3, reps: 10, weight: 25 },
+                    
+                    // Wednesday: Legs (Quads, Hamstrings, Calves, Abs)
+                    { name: 'Back Squats', day: 3, sets: 4, reps: 8, weight: 100 },
+                    { name: 'Leg Press', day: 3, sets: 3, reps: 10, weight: 150 },
+                    { name: 'Romanian Deadlifts (RDL)', day: 3, sets: 3, reps: 12, weight: 70 },
+                    { name: 'Lying Hamstring Curls', day: 3, sets: 3, reps: 12, weight: 60 },
+                    { name: 'Standing Calf Raises', day: 3, sets: 3, reps: 10, weight: 80 },
+                    { name: 'Hanging Leg Raises (Abs)', day: 3, sets: 3, reps: 10, weight: 0 },
+                    
+                    // Friday: Upper Body (Balanced)
+                    { name: 'Overhead Dumbbell Press', day: 4, sets: 4, reps: 8, weight: 45 },
+                    { name: 'Arnold Press', day: 4, sets: 3, reps: 10, weight: 40 },
+                    { name: 'Incline Dumbbell Press', day: 4, sets: 3, reps: 12, weight: 45 },
+                    { name: 'Seated Cable Rows', day: 4, sets: 3, reps: 12, weight: 70 },
+                    { name: 'Dumbbell Bicep Curls', day: 4, sets: 3, reps: 10, weight: 30 },
+                    { name: 'Overhead Tricep Extension', day: 4, sets: 3, reps: 10, weight: 35 },
+                    
+                    // Saturday: Full Body (Compound Focus)
+                    { name: 'Barbell Squats', day: 5, sets: 4, reps: 8, weight: 100 },
+                    { name: 'Deadlifts', day: 5, sets: 3, reps: 10, weight: 110 },
+                    { name: 'Pull-Ups', day: 5, sets: 3, reps: 12, weight: 0 },
+                    { name: 'Weighted Dips', day: 5, sets: 3, reps: 12, weight: 20 },
+                    { name: 'Dumbbell Lateral Raises', day: 5, sets: 3, reps: 10, weight: 18 },
+                    { name: 'Plank with Weight (Abs)', day: 5, sets: 3, reps: 10, weight: 0 }
                 ];
                 
                 this.updateBuilderDays(exampleEx);
-                this.showToast('Example loaded', 'info');
+                this.showToast('5-Day PPL Program loaded!', 'info');
             }
 
             // ─── Dashboard ───────────────────────────────────────────────────────────
